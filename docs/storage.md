@@ -10,6 +10,7 @@ about the Intel 750.
 |---|---|---|---|---|
 | sda | Samsung PM800 128GB | 119G | `/` (95% full) | OS only — never models |
 | nvme1n1 | Intel SSDPEDMW012T4 (SSD 750, 1.2TB) | 1.1T | `/media/knight2/EDS2` (351G free) | **staging/scratch only** — prepared-shard temp, never the model home |
+| DDR4 | 8× 64 GiB | **512 GiB** | — | volatile RAM; verified via `ipmctl show -memoryresources` (the earlier '832G' figure was wrong) |
 | nvme2n1 | Intel SSDPECKE064T8 ("6.4TB" class) | 2.9T | `/media/knight2/claude-data` (99% full — 40G) | data volume; cleanup needed before it can hold anything |
 | nvme0n1 | Intel SSDPECKE064T8 ("6.4TB" class) | 2.9T | **unconfigured LVM PV** (p3) | **MODEL TIER — activate as `eds1`** (see below) |
 | PMem 4×512GB | Optane PMem 100 | 2T | **unconfigured** (no pmem/dax namespace) | expert-shard tier after App Direct setup (see below) |
@@ -102,7 +103,7 @@ Kimi K2.5 ships **natively INT4** (~595 GB) — a Q4_K_M GGUF (~621 GB) is
 
 | Artifact | Size | Where | Notes |
 |---|---|---|---|
-| Native INT4 checkpoint | ~595 G | `eds1` | primary; fits DDR4 page cache (832 G) entirely; PMem becomes cold tier only |
+| Native INT4 checkpoint | ~595 G | `eds1` | primary; DDR4 page cache is only 512 G, so ~1/3 of the expert tail stays served from the PMem tier — PMem is load-bearing, not optional |
 | [unsloth UD-Q2_K_XL](https://huggingface.co/unsloth/Kimi-K2.5-GGUF) | ~375 G | `eds1` | if 595 G proves too heavy for load windows |
 | unsloth UD-TQ1_0 | ~245 G | `eds1` | 1.8-bit; quality floor unknown — holdout set must gate it |
 | ~~Q4_K_M / Q3 GGUF~~ | — | — | rejected: no smaller than native, Q3 untested vs native INT4 |
