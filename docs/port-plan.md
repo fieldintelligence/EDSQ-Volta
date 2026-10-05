@@ -50,7 +50,19 @@ Source of truth being ported: [1CatAI/1Cat-vLLM-Gaudi](https://github.com/1CatAI
    contract (fixed addresses, per-step input update, invalidation rules).
 6. Only then: benchmark initialization (separate workflow, `evidence/`).
 
-## 4. Explicit non-goals
+## 4. Future profile: 6-GPU heterogeneous mode (post-V1)
+
+Benchmark later via PCIe bifurcation: **4× RTX 4000 Ada (sm_89) + 2×
+V100-SXM2** in one engine view. Out of scope for the plugin until the TP2
+V100 route is validated, because current vLLM-style TP requires homogeneous
+groups. Planned approach mirrors the llama.cpp placement model instead:
+static per-layer/per-tensor residency (Ada cards take attention+KV given
+their compute advantage, V100 HBM takes expert tensors), no cross-vendor
+tensor parallel. Placement policy extension of
+`vllm_volta/moe.plan_expert_placement` (e.g. `plan_heterogeneous_6gpu`),
+driven by the same correctness gates.
+
+## 5. Explicit non-goals
 
 - No bf16/fp8 anywhere (sm_70).
 - No multimodal (matches upstream flash-tier scope decision).
