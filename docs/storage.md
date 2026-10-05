@@ -51,11 +51,17 @@ That is a feature, not a limitation: NUMA-local shard access.
 # 0) tools (Ubuntu universe)
 sudo apt install -y ipmctl ndctl
 
-# 1) goal: App Direct, one interleaved set per socket
+# 1) goal: 100% App Direct. ipmctl 3.x note: per-socket interleaving is the
+#    DEFAULT of PersistentMemoryType=AppDirect (older 'AppDirect1Interleaved'
+#    syntax does not exist in 3.x and errors out — verified on node2).
 #    WARNING: erases the modules; requires a real POWER CYCLE afterwards
 #    (shutdown + remove AC, not a warm reboot)
-sudo ipmctl create -goal MemoryMode=0 AppDirect1Interleaved=0x1 -dimm all
-sudo ipmctl show -goal          # verify before cycling
+sudo ipmctl create -dimm all -goal MemoryMode=0 PersistentMemoryType=AppDirect
+sudo ipmctl show -goal          # verify the PENDING goal before cycling
+# expect per socket: ~960 GiB AppDirect1 (one interleaved set per socket)
+
+# fstab opruimen als de pmem-regels voortijdig toegevoegd waren:
+sudo sed -i '\#/dev/pmem[01] #d' /etc/fstab
 
 # --- POWER CYCLE ---
 
@@ -71,7 +77,10 @@ echo '/dev/pmem0 /mnt/pmem0 ext4 dax=always,nofail 0 2' | sudo tee -a /etc/fstab
 echo '/dev/pmem1 /mnt/pmem1 ext4 dax=always,nofail 0 2' | sudo tee -a /etc/fstab
 sudo mount -a
 
-# 4) verify
+# 4) fstab (pas NA succesvolle namespaces) + verify
+echo '/dev/pmem0 /mnt/pmem0 ext4 dax=always,nofail 0 2' | sudo tee -a /etc/fstab
+echo '/dev/pmem1 /mnt/pmem1 ext4 dax=always,nofail 0 2' | sudo tee -a /etc/fstab
+sudo systemctl daemon-reload && sudo mount -a
 ndctl list -RN        # 2 regions, 2 namespaces
 df -h /mnt/pmem0 /mnt/pmem1   # ~960G each (1/16 of PMem100 is reserved for metadata)
 ```
