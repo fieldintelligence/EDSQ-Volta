@@ -29,11 +29,13 @@ Source of truth being ported: [1CatAI/1Cat-vLLM-Gaudi](https://github.com/1CatAI
   staging workers.
 - CPUs: 2× Xeon Platinum 8259CL (Cascade Lake, AVX-512, **no AMX** — do not
   port any 1Cat CPU path that assumes AMX).
-- Memory tier: 832 GB DDR4-2666 + **4× 512 GB Optane PMem**. PMem operates
-  App Direct (fsdax mount) as the expert-weights tier: ~6-7 GB/s per module
-  sequential read → capacity is free, bandwidth is ~25× worse than DDR4, so
-  the MoE placement policy keeps *hot* experts on the V100s and accepts that
-  PMem-resident experts bound decode t/s (see `moe.plan_expert_placement`).
+- Memory tier: 832 GB DDR4-2666 + **4× 512 GB Optane PMem** (App Direct,
+  fsdax) + **6.4TB-class NVMe pair**. Storage rules live in
+  [docs/storage.md](storage.md): models ALWAYS on `eds1` (the 6.4TB pair),
+  the 1.2TB Intel 750 (EDS2) is staging/scratch only, PMem hosts prepared
+  expert shards. Kimi K2.5 ships natively INT4 (~595 GB) — it fits the DDR4
+  page cache entirely, so PMem-resident experts bound decode t/s only for
+  shards we explicitly demote (see `moe.plan_expert_placement`).
 
 ## 3. Order of work
 
