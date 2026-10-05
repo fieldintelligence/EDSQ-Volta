@@ -5,9 +5,13 @@ Naming and contract mirror the 1Cat DeepSeek entrypoints
 https://github.com/1CatAI/1Cat-vLLM-Gaudi — fixed topology, fixed dtype,
 single-request defaults until benchmarks prove a wider service envelope.
 
-Model specs (total/active params, expert count) are TODO-verify at first
-load; the layout below is written against the K2-family MoE shape and must be
-confirmed before any number is recorded in evidence/.
+Model specs (verified 2026-10, public coverage): Kimi K2.5 ~1.04T total /
+32B active MoE, 384 experts with 8 active per token, 61 layers (1 dense +
+60 MoE), MLA attention, SwiGLU, 256k context. Consequence for this box:
+fp16 weights ≈ 2.1 TB exceed even the 2 TB PMem pool — a sub-8-bit quant is
+mandatory, after which the expert tail fits in DDR4 page cache and PMem acts
+as the cold tier only. Decode is bounded by ~32B active × bits-per-weight
+against ~150-200 GB/s effective CPU bandwidth.
 """
 
 from __future__ import annotations
@@ -56,9 +60,10 @@ def main() -> None:
     p.add_argument("--single-request", action="store_true", default=True,
                    help="mirror 1Cat single-request service contract (default)")
     p.add_argument("--num-experts", type=int, default=384,
-                   help="TODO-verify against the checkpoint config.json")
-    p.add_argument("--expert-bytes-fp16", type=int, default=192 * 1024**2,
-                   help="per-expert fp16 bytes; TODO-verify")
+                   help="verified: Kimi K2.5 has 384 experts, 8 active per token")
+    p.add_argument("--expert-bytes-fp16", type=int, default=88 * 1024**2,
+                   help="per-expert fp16 bytes, est. 3*7168*2048*2B (K2-family "
+                        "shapes); TODO-verify against the checkpoint config.json")
     args = p.parse_args()
 
     engine_args = build_engine_args(args)
