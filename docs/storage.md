@@ -40,21 +40,51 @@ sudo mount -a
 
 Capacity check after mount: `df -h /media/knight2/eds1` → expect ~2.9T.
 
-### 2. PMem → App Direct interleaved + fsdax (needs a power cycle)
+### 2. PMem → per-socket App Direct + fsdax (needs tools + POWER CYCLE)
+
+Topology: 4× 512GB PMem100 on 2× Xeon 8259CL — 2 modules per socket.
+App Direct interleaving is per-socket (no cross-socket interleave), so this
+yields **2 regions × ~1TB** (region0 = socket0/numa0, region1 = socket1/numa1).
+That is a feature, not a limitation: NUMA-local shard access.
 
 ```bash
-sudo ipmctl create -goal MemoryMode=0 AppDirect1Interleaved=TRUE -dimm all   # then POWER CYCLE
-sudo ndctl create-namespace -m fsdax --region=region0 --name pmem0
-sudo mkfs.ext4 /dev/pmem0
-sudo mkdir -p /mnt/pmem0
+# 0) tools (Ubuntu universe)
+sudo apt install -y ipmctl ndctl
+
+# 1) goal: App Direct, one interleaved set per socket
+#    WARNING: erases the modules; requires a real POWER CYCLE afterwards
+#    (shutdown + remove AC, not a warm reboot)
+sudo ipmctl create -goal MemoryMode=0 AppDirect1Interleaved=0x1 -dimm all
+sudo ipmctl show -goal          # verify before cycling
+
+# --- POWER CYCLE ---
+
+# 2) one fsdax namespace per region
+sudo ndctl create-namespace -m fsdax --region=region0 --align=2M --name=pmem0
+sudo ndctl create-namespace -m fsdax --region=region1 --align=2M --name=pmem1
+
+# 3) filesystems with DAX
+sudo mkfs.ext4 -E lazy_itable_init=0,lazy_init=0 /dev/pmem0
+sudo mkfs.ext4 -E lazy_itable_init=0,lazy_init=0 /dev/pmem1
+sudo mkdir -p /mnt/pmem0 /mnt/pmem1
 echo '/dev/pmem0 /mnt/pmem0 ext4 dax=always,nofail 0 2' | sudo tee -a /etc/fstab
+echo '/dev/pmem1 /mnt/pmem1 ext4 dax=always,nofail 0 2' | sudo tee -a /etc/fstab
 sudo mount -a
+
+# 4) verify
+ndctl list -RN        # 2 regions, 2 namespaces
+df -h /mnt/pmem0 /mnt/pmem1   # ~960G each (1/16 of PMem100 is reserved for metadata)
 ```
 
 Memory Mode is deliberately rejected: it would consume the 832 GB DDR4 as a
 cache and leave us without the page cache the expert tier depends on. App
-Direct keeps DDR4 for the OS/page cache and gives ~26 GB/s aggregate Optane
-read bandwidth behind a 2T DAX filesystem.
+Direct keeps DDR4 for the OS/page cache and gives ~13 GB/s per socket
+region (2× ~6.6 GB/s modules interleaved) behind a DAX filesystem.
+
+NUMA discipline: shards under `/mnt/pmem0` are consumed by socket-0 cores,
+`/mnt/pmem1` by socket-1 cores (`numactl --cpunodebind` in the engine).
+The placement plan round-robins shards between the two mounts so both
+sockets carry half the expert traffic.
 
 ## Kimi K2.5 Tower artifact guidance
 

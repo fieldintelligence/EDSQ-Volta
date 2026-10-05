@@ -30,9 +30,13 @@ def build_engine_args(args: argparse.Namespace) -> dict:
 
     # Expert residency decided once at load, mirroring rank-local prepared
     # weights: hot experts on the two V100s, tail on the PMem pool.
+    import os
+    mounts = tuple(os.environ.get(
+        "VLLM_VOLTA_PMEM_MOUNTS", "/mnt/pmem0,/mnt/pmem1").split(","))
     plan = plan_expert_placement(
         num_experts=args.num_experts,
         expert_bytes_fp16=args.expert_bytes_fp16,
+        pmem_mounts=mounts,
     )
 
     return {

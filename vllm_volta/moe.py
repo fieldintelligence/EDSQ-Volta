@@ -32,14 +32,24 @@ class ExpertResidency(str, Enum):
 
 @dataclass(frozen=True)
 class ExpertPlacementPlan:
-    """Immutable per-expert residency; mirrors 1Cat rank-local prepared weights."""
+    """Immutable per-expert residency; mirrors 1Cat rank-local prepared weights.
+
+    pmem_mounts: one DAX mount per socket (2× ~1TB regions on the 4×512GB
+    PMem100, see docs/storage.md). Shards assigned to PMem round-robin across
+    the mounts so both NUMA nodes carry half the expert traffic; the loader
+    is responsible for binding access to the mount's socket.
+    """
 
     residency: tuple[ExpertResidency, ...]          # indexed by expert id
-    pmem_mount: str = "/mnt/pmem0"                  # fsdax mount with 4×512GB modules
+    pmem_mounts: tuple[str, ...] = ("/mnt/pmem0", "/mnt/pmem1")
 
     def device_for(self, expert_id: int) -> str:
         r = self.residency[expert_id]
         return {"gpu0": "cuda:0", "gpu1": "cuda:1"}.get(r, "cpu")
+
+    def pmem_mount_for(self, expert_id: int) -> str:
+        """Round-robin over DAX mounts for PMem-resident experts."""
+        return self.pmem_mounts[expert_id % len(self.pmem_mounts)]
 
 
 def plan_expert_placement(
@@ -47,6 +57,7 @@ def plan_expert_placement(
     expert_bytes_fp16: int,
     vram_budget_per_gpu: int = 30 * 1024**3,   # V100-SXM2-32GB minus KV headroom
     hot_fraction: float | None = None,
+    pmem_mounts: tuple[str, ...] = ("/mnt/pmem0", "/mnt/pmem1"),
 ) -> ExpertPlacementPlan:
     """Split experts across NVLink GPUs and the PMem-backed CPU pool.
 
@@ -66,7 +77,7 @@ def plan_expert_placement(
             residency.append(ExpertResidency.GPU0 if e % 2 == 0 else ExpertResidency.GPU1)
         else:
             residency.append(ExpertResidency.PMEM_CPU)
-    return ExpertPlacementPlan(residency=tuple(residency))
+    return ExpertPlacementPlan(residency=tuple(residency), pmem_mounts=pmem_mounts)
 
 
 def grouped_prefill_rows(
