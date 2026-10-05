@@ -1,0 +1,7 @@
+# Engine pin: last vLLM release that still builds for compute_70 (V0 engine).
+# Exact tag is a TODO tracked in patches/README.md — do not run benchmarks
+# before this pin is resolved and recorded.
+# vllm @ git+https://github.com/vllm-project/vllm@<SM70_TAG>
+torch>=2.1,<2.6
+safetensors>=0.4
+nccl>=2.18  # NVLink TP2 collectives

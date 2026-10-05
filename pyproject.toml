@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vllm-volta"
+version = "0.1.0"
+description = "1Cat-style vLLM hardware plugin for NVIDIA Volta V100-SXM2 (port of 1Cat-vLLM-Gaudi)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "torch>=2.1,<2.6",
+    "safetensors>=0.4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+include = ["vllm_volta*"]
