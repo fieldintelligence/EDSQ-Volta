@@ -32,7 +32,7 @@ is the *engineering method* documented by 1Cat — see
 - 2× Tesla V100-SXM2-32GB on NVLink baseboard (TP2 target)
 - 4× NVIDIA RTX 4000 Ada 20GB (aux / offload targets, PCIe)
 - 2× Xeon Platinum 8259CL, 832 GB DDR4-2666 + 4× 512 GB Optane PMem
-- 1.2 TB Intel SSD 750 (model staging, 330 GB free per test)
+- "6.4TB" NVMe pair (model tier, `eds1`) + 1.2 TB Intel 750 (staging only) — see [docs/storage.md](docs/storage.md)
 
 ## Status
 
