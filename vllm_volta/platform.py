@@ -60,8 +60,7 @@ def _nvlink_pairs(torch, sm70: list[int]) -> tuple[tuple[int, int], ...]:
     for i, a in enumerate(sm70):
         for b in sm70[i + 1:]:
             try:
-                if torch.cuda.device_can_access_peer(
-                        torch.device("cuda", a), torch.device("cuda", b)):
+                if torch.cuda.can_device_access_peer(a, b):
                     pairs.append((a, b))
             except RuntimeError:
                 continue
