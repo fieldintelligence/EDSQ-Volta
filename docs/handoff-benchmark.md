@@ -31,18 +31,28 @@ benchmarks with all Ada cards < 78 °C** — GPU0/GPU5 hit 80–82 °C idle-load
 - Evidence dir: `evidence/` — kernel microbench + correctness records live
   there; raw JSON, no averaged marketing numbers.
 
-## 3. Blockers (in order)
+## 3. Engine strategy (updated 2026-10-05: colibri installed locally)
 
-1. **Engine pin** — the only real blocker. vLLM dropped sm_70; identify the
-   last V0-engine release that builds for compute_70, pin it in
-   `requirements.txt`, record in `patches/README.md`. Question also asked
-   upstream: [1CatAI/1Cat-vLLM#987](https://github.com/1CatAI/1Cat-vLLM/issues/987)
-   (fork: `febuz/1Cat-vLLM`, branch `feat/volta-edSQ-k25`).
-2. **EDSQ int3-tail decision** — DAX bypasses the page cache, so PMem-resident
-   experts are real Optane traffic (~2.5–3.3 GB/s single-stream measured;
-   parallel fio owed). With ~65% of K2.5 per-token expert bytes on PMem,
-   decode is tier-bound (~1–2 t/s) unless the tail is quantized (int3 ≈ −25%
-   traffic) or the hot fraction grows. Decide with real fio numbers.
+**Primary serving path = Colibri** (v1.11.0, `/media/knight2/EDS2/tools/colibri`,
+see docs/engine-colibri.md): pure-C, OpenAI-compatible (`coli serve
+--model-id x --no-think`), disk/RAM/VRAM as one hierarchy, `qwen38` family
+already supported (baseline replicable directly), DeepSeek-V4-Flash served
+from tiers today. K2.5 Tower needs a `kimi_k25` family descriptor
+(branch `feat/colibri-engine-track`, ours to contribute upstream).
+
+**Research path = vLLM sm_70 pin** (demoted): still wanted for our CUDA
+kernels + deferred TP2 reductions; question pending on
+[1CatAI/1Cat-vLLM#987](https://github.com/1CatAI/1Cat-vLLM/issues/987)
+(fork: `febuz/1Cat-vLLM`, branch `feat/volta-edSQ-k25`).
+
+**Protocol**: two-engine cross-check on identical holdout prompts;
+`well_known_suite.py` for reproducibility, our holdout set on top.
+
+**EDSQ int3-tail decision** — DAX bypasses the page cache: PMem-resident
+experts are real Optane traffic. Parallel probe tool exists
+(`tools/tier_probe.py`); with ~65% of K2.5 per-token expert bytes on PMem,
+decode is tier-bound (~1–2 t/s) unless the tail is int3 (≈ −25%) or the hot
+fraction grows. Decide with probe numbers.
 
 ## 4. Benchmark rules (carried over, non-negotiable)
 
