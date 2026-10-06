@@ -124,8 +124,16 @@ def predict_decode_seconds(
     plan: ExpertPlacementPlan,
     active_bytes_per_token: float,
     bandwidth: dict[str, float] | None = None,
+    traffic: list[float] | tuple[float, ...] | None = None,
 ) -> dict:
     """The design formula as code: T = max_tier(bytes*share / BW).
+
+    `share` is the fraction of per-token expert TRAFFIC served by a tier. With
+    `traffic` (one expected-traffic weight per residency entry, e.g. the
+    per-layer-normalized calibration weights used to build the plan) the
+    shares are traffic-weighted; without it every entry counts equally, which
+    is only right for uniform routing — a frequency-aware plan puts the cold
+    experts on PMem, so count shares overstate PMem traffic and hide the gain.
 
     Returns per-tier seconds, the binding (max) decode seconds and the
     implied tokens/s ceiling. GPU0+GPU1 count as one 'gpu' tier; the caller
@@ -137,21 +145,28 @@ def predict_decode_seconds(
     n = len(plan.residency)
     if n == 0:
         raise ValueError("empty placement plan")
-    counts = {"gpu": 0, "ddr4": 0, "pmem": 0}
-    for r in plan.residency:
+    if traffic is not None and len(traffic) != n:
+        raise ValueError(f"traffic has {len(traffic)} weights for {n} residency entries")
+    weights = [1.0] * n if traffic is None else [max(float(w), 0.0) for w in traffic]
+    total = sum(weights)
+    if total <= 0:
+        weights, total = [1.0] * n, float(n)
+    mass = {"gpu": 0.0, "ddr4": 0.0, "pmem": 0.0}
+    for r, w in zip(plan.residency, weights):
         if r in (ExpertResidency.GPU0, ExpertResidency.GPU1):
-            counts["gpu"] += 1
+            mass["gpu"] += w
         elif r == ExpertResidency.DDR4_NVME:
-            counts["ddr4"] += 1
+            mass["ddr4"] += w
         else:
-            counts["pmem"] += 1
+            mass["pmem"] += w
     tiers = {}
-    for tier, cnt in counts.items():
-        if cnt:
-            tiers[tier] = active_bytes_per_token * (cnt / n) / bw[tier]
+    for tier, m in mass.items():
+        if m:
+            tiers[tier] = active_bytes_per_token * (m / total) / bw[tier]
     worst = max(tiers, key=tiers.get)
     t = tiers[worst]
     return {"tier_seconds": tiers, "binding_tier": worst,
+            "traffic_share": {k: v / total for k, v in mass.items()},
             "decode_seconds": t, "tokens_per_second": 1.0 / t if t else float("inf")}
 
 
