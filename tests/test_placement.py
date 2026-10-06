@@ -117,3 +117,34 @@ def test_per_instance_beats_layer_collapsed_on_skewed_uncorrelated_layers():
         mass_collapsed)
 
     assert inst_share < col_share * 0.75, (inst_share, col_share)
+
+
+def test_predict_without_traffic_keeps_count_shares():
+    plan = plan_expert_placement(num_experts=32, expert_bytes_fp16=1 * GIB,
+                                 vram_budget_per_gpu=4 * GIB,
+                                 ddr4_budget_bytes=12 * GIB)
+    out = predict_decode_seconds(plan, active_bytes_per_token=18 * GIB)
+    pmem = sum(r == ExpertResidency.PMEM_DAX for r in plan.residency) / len(plan.residency)
+    assert out["traffic_share"]["pmem"] == pytest.approx(pmem)
+
+
+def test_traffic_weighted_shares_credit_frequency_aware_placement():
+    # Skewed routing: a frequency-aware plan puts the cold tail on PMem, so the
+    # PMem TRAFFIC share must be well below its COUNT share, and the predicted
+    # ceiling must rise when the traffic weights are passed in.
+    layers, experts = 4, 64
+    freq = {(l, e): 1.0 / (1 + ((e * 7 + l * 13) % experts)) for l in range(layers) for e in range(experts)}
+    plan = plan_expert_instance_placement(num_layers=layers, num_experts=experts, expert_bytes=1 * GIB,
+                                          vram_budget_bytes=16 * GIB, ddr4_budget_bytes=96 * GIB, freq=freq)
+    traffic = [freq[(i // experts, i % experts)] for i in range(layers * experts)]
+    by_count = predict_decode_seconds(plan, active_bytes_per_token=18 * GIB)
+    by_traffic = predict_decode_seconds(plan, active_bytes_per_token=18 * GIB, traffic=traffic)
+    assert by_traffic["traffic_share"]["pmem"] < 0.5 * by_count["traffic_share"]["pmem"]
+    assert by_traffic["tokens_per_second"] > by_count["tokens_per_second"]
+
+
+def test_traffic_length_mismatch_raises():
+    plan = plan_expert_placement(num_experts=8, expert_bytes_fp16=1 * GIB,
+                                 vram_budget_per_gpu=1 * GIB, ddr4_budget_bytes=2 * GIB)
+    with pytest.raises(ValueError):
+        predict_decode_seconds(plan, active_bytes_per_token=1 * GIB, traffic=[1.0] * 3)

@@ -41,3 +41,16 @@ sockets fully parallel); the DDR4 term caps everything near ~17–18 t/s.
 Reality check: the llama.cpp UD-IQ3_XXS GGUF with **all** experts in DDR4 page cache measured ~1.2 t/s
 decode — far below its ~17 t/s bandwidth ceiling, so CPU expert compute, not bandwidth, bound that run.
 The TP2/EDSQ engine has to show that its expert path is bandwidth-bound before these ceilings mean anything.
+
+## Tier-model prediction with traffic weights (2026-10-06, `predict_decode_seconds(..., traffic=...)`)
+
+`plan_expert_instance_placement` with these counts, 60 layers × 384 experts, 23.6 MiB per expert (int4 g32 +
+fp16 scales), 20 GiB per V100 for experts, measured PMem bandwidth, routed bytes/token 11.9 GB:
+
+| DDR4 budget | count shares (old formula) | traffic shares (fixed) |
+|---|---|---|
+| 256 GiB | PMem 0.443 → 2.1 t/s | PMem 0.273 → **3.5 t/s** |
+| 384 GiB | PMem 0.202 → 4.7 t/s | PMem 0.096 → **9.9 t/s** |
+
+The old formula weighted tiers by instance count, so it gave frequency-aware placement no credit. Ceilings
+are bandwidth-only; the llama.cpp GGUF reference measured TG 1.24 t/s (`../baselines/README.md`).
