@@ -7,6 +7,7 @@ torch = pytest.importorskip("torch")
 from vllm_volta.moe import (  # noqa: E402
     ExpertResidency,
     merge_calibration,
+    plan_expert_instance_placement,
     plan_expert_placement,
     predict_decode_seconds,
 )
@@ -75,3 +76,44 @@ def test_merge_calibration_layer_normalization_and_counts_form():
     assert w[0] == pytest.approx(8 / 10)             # layer0 normalized to 1
     assert w[3] == pytest.approx(2 / 2)              # layer1 normalized to 1
     assert w[1] == pytest.approx(2 / 10) and w[2] == 0
+
+
+def test_per_instance_beats_layer_collapsed_on_skewed_uncorrelated_layers():
+    # synthetic: 60 layers x 64 experts, independent skewed per-layer
+    # histograms (calibration README: inter-layer rho = -0.001)
+    import random
+    rng = random.Random(7)
+    L, E = 60, 64
+    HOT_INSTANCES = L * 6
+    per_layer_mass = []
+    for _l in range(L):
+        w = [rng.paretovariate(1.2) for _ in range(E)]
+        tot = sum(w)
+        per_layer_mass.append([x / tot for x in w])
+
+    def pmem_share(residency, mass):
+        slow = {ExpertResidency.PMEM_DAX, ExpertResidency.PMEM_CPU}
+        return sum(m for i, m in enumerate(mass) if residency[i] in slow)
+
+    # per-instance: frequency-weighted, budgets in instances
+    freq = {(l, e): per_layer_mass[l][e] for l in range(L) for e in range(E)}
+    mass_instance = [per_layer_mass[l][e] for l in range(L) for e in range(E)]
+    inst = plan_expert_instance_placement(
+        num_layers=L, num_experts=E, expert_bytes=1,
+        vram_budget_bytes=HOT_INSTANCES, ddr4_budget_bytes=0, freq=freq)
+    inst_share = pmem_share(inst.residency, mass_instance)
+
+    # layer-collapsed: one residency per expert id, weights summed over layers
+    collapsed_w = {}
+    for l in range(L):
+        for e in range(E):
+            collapsed_w[e] = collapsed_w.get(e, 0.0) + per_layer_mass[l][e]
+    collapsed = plan_expert_placement(
+        num_experts=E, expert_bytes_fp16=L, vram_budget_per_gpu=HOT_INSTANCES // 2,
+        freq=collapsed_w, ddr4_budget_bytes=0)
+    mass_collapsed = [per_layer_mass[l][e] for l in range(L) for e in range(E)]
+    col_share = pmem_share(
+        [collapsed.residency[e] for l in range(L) for e in range(E)],
+        mass_collapsed)
+
+    assert inst_share < col_share * 0.75, (inst_share, col_share)

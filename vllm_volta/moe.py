@@ -113,7 +113,10 @@ def plan_expert_placement(
 DEFAULT_TIER_BANDWIDTH = {
     "gpu": 1800 * 1024**3,      # ~1.8 TB/s combined HBM2 (theoretical pair)
     "ddr4": 200 * 1024**3,      # ~200 GB/s effective DDR4-2666 8-channel
-    "pmem": 13 * 1024**3,       # ~13 GB/s per-socket interleaved (parallel est.)
+    "pmem": 10.5 * 1024**3,     # MEASURED 2026-10-06: 10.1-10.5 GB/s per mount,
+                                # local socket, saturates at 4 readers
+                                # (evidence/microbench/pmem_dax_parallel_read_20261006.json);
+                                # remote-socket reads are 0.4-1.0 GB/s -> NUMA-local mandatory
 }
 
 
@@ -150,6 +153,50 @@ def predict_decode_seconds(
     t = tiers[worst]
     return {"tier_seconds": tiers, "binding_tier": worst,
             "decode_seconds": t, "tokens_per_second": 1.0 / t if t else float("inf")}
+
+
+def plan_expert_instance_placement(
+    num_layers: int,
+    num_experts: int,
+    expert_bytes: int,
+    vram_budget_bytes: int,
+    ddr4_budget_bytes: int,
+    freq: dict[tuple[int, int], float] | None = None,
+    pmem_mounts: tuple[str, ...] = ("/mnt/pmem0", "/mnt/pmem1"),
+) -> ExpertPlacementPlan:
+    """Per-(layer, expert) instance placement — the corrected unit.
+
+    Why (evidence/calibration/README.md, 2026-10-06): expert ids are NOT
+    correlated across layers (mean pairwise rho = -0.001 in the unsloth
+    imatrix). Layer-collapsed placement throws that signal away; per-instance
+    placement roughly HALVES PMem traffic at equal tier capacities
+    (0.65 hot: 0.323 collapsed -> 0.198 per-instance).
+
+    Instances are ordered by expected traffic (per-layer-normalized weights)
+    and filled GPU0/GPU1 -> DDR4_NVME -> PMem_DAX. The returned plan indexes
+    residency by instance idx = layer * num_experts + expert.
+    """
+    n = num_layers * num_experts
+    weights = [0.0] * n
+    if freq:
+        for (l, e), w in freq.items():
+            if 0 <= l < num_layers and 0 <= e < num_experts:
+                weights[l * num_experts + e] = float(w)
+    order = sorted(range(n), key=lambda i: weights[i], reverse=True)
+
+    residency: list[ExpertResidency] = [ExpertResidency.PMEM_DAX] * n
+    per_gpu = vram_budget_bytes // max(expert_bytes, 1)
+    ddr4_cap = ddr4_budget_bytes // max(expert_bytes, 1)
+    gpu_left, ddr4_left, gpu_rank = 2 * per_gpu, ddr4_cap, 0
+    for i in order:
+        if gpu_left > 0:
+            residency[i] = ExpertResidency.GPU0 if gpu_rank % 2 == 0 else ExpertResidency.GPU1
+            gpu_left -= 1
+            gpu_rank += 1
+        elif ddr4_left > 0:
+            residency[i] = ExpertResidency.DDR4_NVME
+            ddr4_left -= 1
+    return ExpertPlacementPlan(residency=tuple(residency), pmem_mounts=pmem_mounts)
 
 
 def merge_calibration(events) -> dict[int, float]:
