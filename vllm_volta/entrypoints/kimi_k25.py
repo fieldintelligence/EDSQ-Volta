@@ -19,7 +19,8 @@ from __future__ import annotations
 import argparse
 import json
 
-from vllm_volta.moe import plan_expert_placement, predict_decode_seconds
+from vllm_volta.moe import (plan_expert_instance_placement, plan_expert_placement,
+                             predict_decode_seconds)
 from vllm_volta.platform import detect
 
 
@@ -34,25 +35,48 @@ def build_engine_args(args: argparse.Namespace) -> dict:
     import os
     mounts = tuple(os.environ.get(
         "VLLM_VOLTA_PMEM_MOUNTS", "/mnt/pmem0,/mnt/pmem1").split(","))
-    freq = None
-    if args.calibration:
-        with open(args.calibration) as f:
-            doc = json.load(f)
-        assert doc.get("format") == "edsq-calibration-1", "unknown calibration format"
-        freq = {int(k): float(v) for k, v in doc["expert_weights"].items()}
-        print(f"[VOLTA] calibration loaded: {len(freq)} experts, "
-              f"fp {doc.get('fingerprint')}")
     # DDR4 page-cache tier: 512G RAM minus OS/KV/attention headroom
     ddr4 = int(float(os.environ.get("VLLM_VOLTA_DDR4_BUDGET", "384")) * 1024**3)
-    plan = plan_expert_placement(
-        num_experts=args.num_experts,
-        expert_bytes_fp16=args.expert_bytes_fp16,
-        pmem_mounts=mounts,
-        freq=freq,
-        ddr4_budget_bytes=ddr4,
-    )
+    if args.calibration and args.calibration.endswith(".jsonl"):
+        # Per-layer router counts ({"layer", "counts"} lines, e.g.
+        # evidence/calibration/kimi_k25_unsloth_imatrix_expert_counts.jsonl):
+        # place per (layer, expert) instance and predict with traffic shares.
+        rows = [json.loads(line) for line in open(args.calibration) if line.strip()]
+        base = min(int(r["layer"]) for r in rows)
+        freq_inst = {}
+        for r in rows:
+            total = float(sum(r["counts"])) or 1.0
+            for e, c in enumerate(r["counts"]):
+                freq_inst[(int(r["layer"]) - base, e)] = c / total
+        print(f"[VOLTA] per-layer calibration loaded: {len(rows)} layers x {args.num_experts} experts")
+        plan = plan_expert_instance_placement(
+            num_layers=len(rows), num_experts=args.num_experts,
+            expert_bytes=args.expert_bytes_fp16,
+            vram_budget_bytes=int(float(os.environ.get("VLLM_VOLTA_VRAM_EXPERT_BUDGET", "20")) * 1024**3),
+            ddr4_budget_bytes=ddr4, freq=freq_inst, pmem_mounts=mounts)
+        traffic = [freq_inst.get((i // args.num_experts, i % args.num_experts), 0.0)
+                   for i in range(len(rows) * args.num_experts)]
+    else:
+        freq = None
+        if args.calibration:
+            with open(args.calibration) as f:
+                doc = json.load(f)
+            assert doc.get("format") == "edsq-calibration-1", "unknown calibration format"
+            freq = {int(k): float(v) for k, v in doc["expert_weights"].items()}
+            print(f"[VOLTA] calibration loaded: {len(freq)} experts, "
+                  f"fp {doc.get('fingerprint')}")
+        plan = plan_expert_placement(
+            num_experts=args.num_experts,
+            expert_bytes_fp16=args.expert_bytes_fp16,
+            pmem_mounts=mounts,
+            freq=freq,
+            ddr4_budget_bytes=ddr4,
+        )
+        traffic = None
+        print("[VOLTA] WARNING: legacy expert-id plan models ONE set of experts, not every MoE layer, "
+              "so its ceiling is not a K2.5 prediction; pass a per-layer counts JSONL to --calibration")
     est = predict_decode_seconds(
-        plan, active_bytes_per_token=args.active_bytes * 1024**2)
+        plan, active_bytes_per_token=args.active_bytes * 1024**2, traffic=traffic)
     print(f"[VOLTA] tier model: binding={est['binding_tier']} "
           f"ceiling≈{est['tokens_per_second']:.1f} tok/s "
           f"(docs/design-k25-scaling.md)")
@@ -89,7 +113,9 @@ def main() -> None:
     p.add_argument("--active-bytes", type=float, default=18000.0,
                    help="per-token active MiB at the served quant (K2.5 ≈ 18000)")
     p.add_argument("--calibration", default=None,
-                   help="edsq-calibration-1 JSON from tools/calibrate_expert_freq.py")
+                   help="edsq-calibration-1 JSON from tools/calibrate_expert_freq.py (layer-collapsed, "
+                        "legacy) or a per-layer counts JSONL (preferred: per-(layer, expert) placement "
+                        "and traffic-weighted tier shares)")
     args = p.parse_args()
 
     engine_args = build_engine_args(args)
