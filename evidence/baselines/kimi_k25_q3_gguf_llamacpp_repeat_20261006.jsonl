@@ -1,0 +1,8 @@
+{"config": "R_A_cpu_moe", "probe": 1, "tg_tps": 1.3415575613206192, "pp_tps": 4.175736284630915, "tg_tokens": 96, "pp_tokens": 454, "wall_s": 179.6}
+{"config": "R_A_cpu_moe", "probe": 2, "tg_tps": 1.2488545374723932, "pp_tps": 4.266805168548407, "tg_tokens": 96, "pp_tokens": 431, "wall_s": 177.1}
+{"config": "R_A_cpu_moe", "probe": 3, "tg_tps": 1.4007491383328539, "pp_tps": 4.02351574114649, "tg_tokens": 96, "pp_tokens": 431, "wall_s": 175.0}
+{"config": "R_A_cpu_moe", "probe": 4, "tg_tps": 1.4251664808224573, "pp_tps": 3.637702611700828, "tg_tokens": 96, "pp_tokens": 431, "wall_s": 185.2}
+{"config": "R_E_noopoff_t32", "probe": 1, "tg_tps": 1.2061244000768974, "pp_tps": 13.553270472827036, "tg_tokens": 96, "pp_tokens": 454, "wall_s": 112.3}
+{"config": "R_E_noopoff_t32", "probe": 2, "tg_tps": 1.3413159043215361, "pp_tps": 14.250623365579969, "tg_tokens": 96, "pp_tokens": 431, "wall_s": 101.1}
+{"config": "R_E_noopoff_t32", "probe": 3, "tg_tps": 1.1274708850819721, "pp_tps": 14.197244324758637, "tg_tokens": 96, "pp_tokens": 431, "wall_s": 114.7}
+{"config": "R_E_noopoff_t32", "probe": 4, "tg_tps": 1.3010518716781576, "pp_tps": 15.341963466620232, "tg_tokens": 96, "pp_tokens": 431, "wall_s": 101.2}

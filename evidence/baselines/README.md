@@ -22,3 +22,16 @@ CPU jobs (Numerai research/backfill) ran concurrently; TG varies ~±20 % between
 Repeat with ≥3 probes on an idle box before quoting a single number.
 
 Quality on the same build: 8-task battery 0.833 (instant) / 0.396 (thinking eats the fixed task budgets).
+
+## Repeat run (n = 4 per config, unique ~430-token prompts, no prompt-cache hits)
+
+Raw: `kimi_k25_q3_gguf_llamacpp_repeat_20261006.jsonl`.
+
+| config | TG t/s (mean ± sd) | PP t/s (mean ± sd) |
+|---|---|---|
+| A — `--cpu-moe`, 48 threads | 1.35 ± 0.07 | 4.03 ± 0.24 |
+| **E — `--cpu-moe --no-op-offload`, 32 threads** | 1.24 ± 0.08 | **14.34 ± 0.64** |
+
+**Quotable baseline:** E — PP ~14 t/s, TG ~1.2–1.3 t/s at a ~430-token context. The higher TG of the
+single-probe sweep (up to 2.2 t/s) only holds for a cached, short context; TG drops as the context grows.
+E is the better general setting (3.6× PP for −8 % TG).
