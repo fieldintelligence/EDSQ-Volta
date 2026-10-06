@@ -27,7 +27,9 @@ import torch
 class ExpertResidency(str, Enum):
     GPU0 = "gpu0"
     GPU1 = "gpu1"
-    PMEM_CPU = "pmem_cpu"   # mmap'd from the DAX mount; page-cache resident
+    DDR4_NVME = "ddr4_nvme"  # shard on NVMe, served via the DDR4 page cache
+    PMEM_DAX = "pmem_dax"    # DAX mount: every read is real Optane traffic
+    PMEM_CPU = "pmem_cpu"    # legacy alias of PMEM_DAX (pre-storage-map name)
 
 
 @dataclass(frozen=True)
@@ -58,26 +60,122 @@ def plan_expert_placement(
     vram_budget_per_gpu: int = 30 * 1024**3,   # V100-SXM2-32GB minus KV headroom
     hot_fraction: float | None = None,
     pmem_mounts: tuple[str, ...] = ("/mnt/pmem0", "/mnt/pmem1"),
+    freq: dict[int, float] | None = None,      # expert_id -> expected relative traffic
+    ddr4_budget_bytes: int | None = None,      # page-cache tier capacity (NVMe shards)
 ) -> ExpertPlacementPlan:
-    """Split experts across NVLink GPUs and the PMem-backed CPU pool.
+    """Frequency-aware static placement (PowerInfer-style hot/cold split).
 
-    GPU0/GPU1 alternate experts (balances TP2 expert GEMMs over NVLink);
-    overflow lands on PMem. NVLink move (on miss) is 10-50x cheaper than a
-    PCIe re-read, so residency is static by design.
+    Experts are ordered by expected traffic (calibration `freq`, uniform when
+    absent) and greedily filled into tiers: GPU0/GPU1 (alternating, balances
+    TP2 expert GEMMs over NVLink), then the DDR4 page-cache tier (NVMe shards
+    when `ddr4_budget_bytes` is set), then the PMem DAX tail. Residency is
+    static by design: routing is data-dependent, experts cannot migrate per
+    step. If the whole model fits in VRAM, everything lands on the GPUs —
+    callers should use stock tensor parallel instead (see
+    docs/design-k25-scaling.md).
     """
     if hot_fraction is None:
         hot_fraction = float(os.environ.get("VLLM_VOLTA_MOE_HOT_FRACTION", "0.35"))
     per_gpu = vram_budget_per_gpu // max(expert_bytes_fp16, 1)
-    hot = min(num_experts, 2 * per_gpu)
-    hot = min(hot, int(num_experts * hot_fraction) * 2)
 
-    residency: list[ExpertResidency] = []
-    for e in range(num_experts):
-        if e < hot:
-            residency.append(ExpertResidency.GPU0 if e % 2 == 0 else ExpertResidency.GPU1)
-        else:
-            residency.append(ExpertResidency.PMEM_CPU)
+    weights = [1.0] * num_experts
+    if freq:
+        for e, w in freq.items():
+            if 0 <= e < num_experts:
+                weights[e] = float(w)
+    order = sorted(range(num_experts), key=lambda e: weights[e], reverse=True)
+
+    if ddr4_budget_bytes is None and freq is None:
+        # legacy path: uniform hot fraction, tail straight to PMem
+        hot = min(num_experts, 2 * per_gpu, int(num_experts * hot_fraction) * 2)
+        residency = [ExpertResidency.PMEM_CPU] * num_experts
+        for rank, e in enumerate(order[:hot]):
+            residency[e] = ExpertResidency.GPU0 if rank % 2 == 0 else ExpertResidency.GPU1
+        return ExpertPlacementPlan(residency=tuple(residency), pmem_mounts=pmem_mounts)
+
+    gpu_cap = 2 * per_gpu
+    ddr4_cap = (ddr4_budget_bytes or 0) // max(expert_bytes_fp16, 1)
+    residency: list[ExpertResidency] = [ExpertResidency.PMEM_DAX] * num_experts
+    gpu_left, ddr4_left, gpu_rank = gpu_cap, ddr4_cap, 0
+    for e in order:
+        if gpu_left > 0:
+            residency[e] = ExpertResidency.GPU0 if gpu_rank % 2 == 0 else ExpertResidency.GPU1
+            gpu_left -= 1
+            gpu_rank += 1
+        elif ddr4_left > 0:
+            residency[e] = ExpertResidency.DDR4_NVME
+            ddr4_left -= 1
     return ExpertPlacementPlan(residency=tuple(residency), pmem_mounts=pmem_mounts)
+
+
+# Design-model bandwidth defaults (docs/design-k25-scaling.md): V100 HBM pair
+# aggregated, dual-channel-ish DDR4-2666 effective, PMem parallel-read est.
+DEFAULT_TIER_BANDWIDTH = {
+    "gpu": 1800 * 1024**3,      # ~1.8 TB/s combined HBM2 (theoretical pair)
+    "ddr4": 200 * 1024**3,      # ~200 GB/s effective DDR4-2666 8-channel
+    "pmem": 13 * 1024**3,       # ~13 GB/s per-socket interleaved (parallel est.)
+}
+
+
+def predict_decode_seconds(
+    plan: ExpertPlacementPlan,
+    active_bytes_per_token: float,
+    bandwidth: dict[str, float] | None = None,
+) -> dict:
+    """The design formula as code: T = max_tier(bytes*share / BW).
+
+    Returns per-tier seconds, the binding (max) decode seconds and the
+    implied tokens/s ceiling. GPU0+GPU1 count as one 'gpu' tier; the caller
+    owns the KV-cache and attention allowance inside `active_bytes`.
+    """
+    bw = dict(DEFAULT_TIER_BANDWIDTH)
+    if bandwidth:
+        bw.update(bandwidth)
+    n = len(plan.residency)
+    if n == 0:
+        raise ValueError("empty placement plan")
+    counts = {"gpu": 0, "ddr4": 0, "pmem": 0}
+    for r in plan.residency:
+        if r in (ExpertResidency.GPU0, ExpertResidency.GPU1):
+            counts["gpu"] += 1
+        elif r == ExpertResidency.DDR4_NVME:
+            counts["ddr4"] += 1
+        else:
+            counts["pmem"] += 1
+    tiers = {}
+    for tier, cnt in counts.items():
+        if cnt:
+            tiers[tier] = active_bytes_per_token * (cnt / n) / bw[tier]
+    worst = max(tiers, key=tiers.get)
+    t = tiers[worst]
+    return {"tier_seconds": tiers, "binding_tier": worst,
+            "decode_seconds": t, "tokens_per_second": 1.0 / t if t else float("inf")}
+
+
+def merge_calibration(events) -> dict[int, float]:
+    """Aggregate router-activation events into per-expert traffic weights.
+
+    `events` is an iterable of dicts, either {"layer": l, "expert": e} or
+    {"layer": l, "counts": [n_0, .., n_{E-1}]}. Per-layer normalization keeps
+    busy layers from dominating. Layer-collapsed by design: the placement
+    plan is per expert-id across layers (per-instance placement is future
+    work; see design doc).
+    """
+    per_layer: dict[int, dict[int, float]] = {}
+    for ev in events:
+        l = int(ev["layer"])
+        d = per_layer.setdefault(l, {})
+        if "counts" in ev:
+            for e, c in enumerate(ev["counts"]):
+                d[e] = d.get(e, 0.0) + float(c)
+        else:
+            d[int(ev["expert"])] = d.get(int(ev["expert"]), 0.0) + 1.0
+    weights: dict[int, float] = {}
+    for l, d in per_layer.items():
+        total = sum(d.values()) or 1.0
+        for e, c in d.items():
+            weights[e] = weights.get(e, 0.0) + c / total
+    return weights
 
 
 def grouped_prefill_rows(
