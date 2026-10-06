@@ -90,6 +90,9 @@ def main() -> None:
                    help="per-token active MiB at the served quant (K2.5 ≈ 18000)")
     p.add_argument("--calibration", default=None,
                    help="edsq-calibration-1 JSON from tools/calibrate_expert_freq.py")
+    p.add_argument("--mtp", type=int, default=0,
+                   help="MTP draft tokens per step (contract: vllm_volta/speculative.py); "
+                        "0 = plain decode. Engine support lands with the serving path.")
     args = p.parse_args()
 
     engine_args = build_engine_args(args)
