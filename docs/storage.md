@@ -71,8 +71,10 @@ sudo ndctl create-namespace -m fsdax --region=region0 --align=2M --name=pmem0
 sudo ndctl create-namespace -m fsdax --region=region1 --align=2M --name=pmem1
 
 # 3) filesystems with DAX
-sudo mkfs.ext4 -E lazy_itable_init=0,lazy_init=0 /dev/pmem0
-sudo mkfs.ext4 -E lazy_itable_init=0,lazy_init=0 /dev/pmem1
+# NOTE: 'lazy_init' is not a valid mke2fs -E option (mke2fs 1.47 rejects it);
+# the intended pair is lazy_itable_init + lazy_journal_init
+sudo mkfs.ext4 -F -E lazy_itable_init=0,lazy_journal_init=0 /dev/pmem0
+sudo mkfs.ext4 -F -E lazy_itable_init=0,lazy_journal_init=0 /dev/pmem1
 sudo mkdir -p /mnt/pmem0 /mnt/pmem1
 echo '/dev/pmem0 /mnt/pmem0 ext4 dax=always,nofail 0 2' | sudo tee -a /etc/fstab
 echo '/dev/pmem1 /mnt/pmem1 ext4 dax=always,nofail 0 2' | sudo tee -a /etc/fstab
@@ -95,6 +97,24 @@ NUMA discipline: shards under `/mnt/pmem0` are consumed by socket-0 cores,
 `/mnt/pmem1` by socket-1 cores (`numactl --cpunodebind` in the engine).
 The placement plan round-robins shards between the two mounts so both
 sockets carry half the expert traffic.
+
+## Measured (2026-10-05, post-cycle) — and one design consequence
+
+Provisioning verified: region0/region1 ~1004 GiB each, persistence_domain=
+memory_controller; namespaces namespace0.0/1.0 fsdax 2M, 988.31 GiB each;
+ext4 mounted `dax=always`; 972G usable per mount.
+
+Single-stream dd (O_DIRECT, 4G): writes 1.2-1.5 GB/s, reads 2.5-3.3 GB/s
+per mount. dd is a weak probe for Optane (no queue parallelism) — a parallel
+fio run is owed in the benchmark session; expect several GB/s more.
+
+DESIGN CONSEQUENCE: DAX bypasses the page cache, so every PMem-resident
+expert read hits Optane for real. With ~65% of K2.5's per-token expert bytes
+in the PMem tier at ~8-13 GB/s parallel-read, decode would be tier-bound
+(~1-2 t/s). Mitigation to evaluate in the benchmark session: quantize the
+PMem-resident tail to EDSQ int3 (contract already in vllm_volta/quant.py) —
+tail bytes drop ~25% and traffic shrinks proportionally; alternatively raise
+the GPU/DDR4 hot fraction and shrink the tail.
 
 ## Kimi K2.5 Tower artifact guidance
 
