@@ -84,3 +84,40 @@ def estimate(name: str, model_total_bytes: int, active_bytes_per_token: int,
                                  active_bytes_per_token=active_bytes_per_token,
                                  bandwidth=p["bandwidth"])
     return {"profile": name, "fits_vram": fits, "plan": plan, "estimate": est}
+
+
+# --- "werk het uit voor jouw bak" CLI -------------------------------------
+# python -m vllm_volta.profiles --profile v100x2-geek-epyc
+# Turns readers into users: anyone computes their own K2.5 ceiling locally.
+MODEL_REGISTRY = {
+    "k25": {"label": "Kimi K2.5 Tower (native INT4)",
+            "model_total_bytes": 595 * GIB, "active_bytes_per_token": 18 * GIB,
+            "num_experts": 384, "expert_bytes": 24 * 1024**2, "layers": 61},
+}
+
+if __name__ == "__main__":
+    import argparse
+
+    ap = argparse.ArgumentParser(
+        prog="python -m vllm_volta.profiles",
+        description="Predict your K2.5 decode ceiling per hardware profile.")
+    ap.add_argument("--profile", default="v100x2-pmem",
+                    help=f"one of: {', '.join(PROFILES)}")
+    ap.add_argument("--model", default="k25", choices=sorted(MODEL_REGISTRY))
+    a = ap.parse_args()
+
+    m = dict(MODEL_REGISTRY[a.model])
+    label = m.pop("label")
+    out = estimate(a.profile, **m)
+    p = resolve(a.profile)
+    print(f"model   : {label}")
+    print(f"profile : {a.profile} — {p['desc']}")
+    print(f"fits VRAM ({p['vram_total_gib']}G): {out['fits_vram']}"
+          + ("  -> use stock tensor parallel, not this stack" if out["fits_vram"] else ""))
+    e = out["estimate"]
+    for tier, sec in sorted(e["tier_seconds"].items(), key=lambda kv: -kv[1]):
+        print(f"  {tier:5s}: {sec*1000:7.1f} ms/token")
+    print(f"binding : {e['binding_tier']} tier")
+    print(f"ceiling : ~{e['tokens_per_second']:.1f} tok/s decode "
+          f"(bandwidth-only; real engines land below — calibrate with "
+          f"tools/tier_probe.py + tools/calibrate_expert_freq.py)")
