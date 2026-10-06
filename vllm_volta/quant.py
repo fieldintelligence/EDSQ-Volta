@@ -28,6 +28,27 @@ import torch
 
 _LEVELS = {4: 7, 3: 3}
 
+# Named artifact format ("our own quant"). One place to rename; the magic
+# string travels inside every manifest so tooling can reject foreign files.
+FORMAT_NAME = "edsq"
+FORMAT_VERSION = 1
+FORMAT_MAGIC = "EDSQ"
+
+
+def format_header(scheme: dict) -> dict:
+    """Manifest header identifying an EDSQ artifact.
+
+    `scheme` captures the quantization decisions for this artifact, e.g.
+    {"bits": 4, "group_size": 128, "attention_bits": 8, "source":
+    "moonshotai/Kimi-K2.5-Tower native INT4"}.
+    """
+    return {
+        "magic": FORMAT_MAGIC,
+        "format": FORMAT_NAME,
+        "format_version": FORMAT_VERSION,
+        "scheme": scheme,
+    }
+
 
 @dataclass(frozen=True)
 class PackedTensor:
@@ -125,3 +146,12 @@ def fingerprint(manifest: dict) -> str:
     """Stable manifest fingerprint (1Cat manifest discipline)."""
     blob = json.dumps(manifest, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(blob).hexdigest()[:16]
+
+
+def bits_for_residency(residency, hot_bits: int = 4, tail_bits: int = 3) -> int:
+    """Per-tier bits policy (design doc: the PMem tail pays every read, so it
+    earns the smaller format). GPU and DDR4 tiers keep `hot_bits`; the DAX
+    tail takes `tail_bits` (~25% fewer bytes per expert read)."""
+    if residency.value.startswith("pmem"):
+        return tail_bits
+    return hot_bits
