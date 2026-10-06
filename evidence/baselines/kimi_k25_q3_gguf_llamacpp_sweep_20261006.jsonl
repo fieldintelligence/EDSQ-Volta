@@ -1,0 +1,12 @@
+{"config": "A_cpu_moe", "probe": 1, "tg_tps": 2.1482413139819756, "pp_tps": 0.788008182536877, "tg_tokens": 96, "pp_tokens": 45, "wall_s": 101.4}
+{"config": "A_cpu_moe", "probe": 2, "tg_tps": 2.159968838243253, "pp_tps": 1.6563860307027714, "tg_tokens": 96, "pp_tokens": 1, "wall_s": 44.6}
+{"config": "B_cpu_moe_numa", "probe": 1, "tg_tps": 1.7787820177720548, "pp_tps": 0.7985829518192012, "tg_tokens": 96, "pp_tokens": 45, "wall_s": 109.8}
+{"config": "B_cpu_moe_numa", "probe": 2, "tg_tps": 1.4267499944732212, "pp_tps": 1.8038526685294451, "tg_tokens": 96, "pp_tokens": 1, "wall_s": 67.2}
+{"config": "C_gpu12_numa", "probe": 1, "tg_tps": 1.535247687003915, "pp_tps": 0.9902965026952789, "tg_tokens": 96, "pp_tokens": 45, "wall_s": 107.4}
+{"config": "C_gpu12_numa", "probe": 2, "tg_tps": 1.7356755111148732, "pp_tps": 1.2055832973667648, "tg_tokens": 96, "pp_tokens": 1, "wall_s": 55.6}
+{"config": "A2_cpu_moe_longprompt", "probe": 1, "tg_tps": 1.6502431859157198, "pp_tps": 4.207075706738702, "tg_tokens": 96, "pp_tokens": 450, "wall_s": 164.6}
+{"config": "A2_cpu_moe_longprompt", "probe": 2, "tg_tps": 1.7313772245600267, "pp_tps": 1.6235874788933629, "tg_tokens": 96, "pp_tokens": 1, "wall_s": 55.5}
+{"config": "D_cpu_moe_noopoff", "probe": 1, "tg_tps": 1.5079662603501844, "pp_tps": 7.153942119393825, "tg_tokens": 96, "pp_tokens": 450, "wall_s": 125.9}
+{"config": "D_cpu_moe_noopoff", "probe": 2, "tg_tps": 1.4285699033313815, "pp_tps": 1.013851235580501, "tg_tokens": 96, "pp_tokens": 1, "wall_s": 67.5}
+{"config": "E_cpu_moe_noopoff_t32", "probe": 1, "tg_tps": 0.9682143780732017, "pp_tps": 13.034484089036997, "tg_tokens": 96, "pp_tokens": 450, "wall_s": 132.7}
+{"config": "E_cpu_moe_noopoff_t32", "probe": 2, "tg_tps": 1.1054924296751174, "pp_tps": 1.08528848053101, "tg_tokens": 96, "pp_tokens": 1, "wall_s": 86.9}
