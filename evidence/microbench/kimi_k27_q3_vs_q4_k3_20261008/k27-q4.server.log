@@ -1,0 +1,376 @@
+Oct 08 22:48:29 node2 systemd[3297]: Started volta-k27-q4.service - /media/knight2/EDS2/tools/llama.cpp/build-v100/bin/llama-server --model /media/knight2/eds1/models/kimi-k2.7-ud-q4/Kimi-K2.7-Code-UD-Q4_K_XL-00001-of-00014.gguf --alias k27q4 --host 127.0.0.1 --port 18050 --ctx-size 8192 --parallel 1 -ngl 99 --threads 48 --flash-attn on --cache-type-k q8_0 --cache-type-v q8_0 --cpu-moe --no-op-offload --jinja --special.
+Oct 08 22:48:30 node2 llama-server[299633]: 0.00.155.382 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+Oct 08 22:48:30 node2 llama-server[299633]: 0.00.159.558 W srv  llama_server: -----------------
+Oct 08 22:48:30 node2 llama-server[299633]: 0.00.159.561 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+Oct 08 22:48:30 node2 llama-server[299633]: 0.00.159.562 W srv  llama_server: this can be a security risk (cross-origin attacks)
+Oct 08 22:48:30 node2 llama-server[299633]: 0.00.159.563 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+Oct 08 22:48:30 node2 llama-server[299633]: 0.00.159.563 W srv  llama_server: -----------------
+Oct 08 22:48:30 node2 llama-server[299633]: 0.00.161.524 I srv    load_model: loading model '/media/knight2/eds1/models/kimi-k2.7-ud-q4/Kimi-K2.7-Code-UD-Q4_K_XL-00001-of-00014.gguf'
+Oct 08 22:48:31 node2 llama-server[299633]: 0.01.136.479 W llama_model_loader: tensor overrides to CPU are used with mmap enabled - consider using --load-mode none for better performance
+Oct 08 22:53:35 node2 llama-server[299633]: 5.04.861.428 W llama_context: setting new yarn_attn_factor = 1.0000 (mscale == 1.0, mscale_all_dim = 1.0)
+Oct 08 22:53:35 node2 llama-server[299633]: 5.05.034.086 I cmn          init: llama threadpool init, n_threads = 48
+Oct 08 22:53:39 node2 llama-server[299633]: 5.09.051.232 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 8192, kv_unified = 'false'
+Oct 08 22:53:39 node2 llama-server[299633]: 5.09.060.516 W srv          init: chat template supports preserving reasoning, it is enabled by default (may use more tokens, disable via --no-reasoning-preserve)
+Oct 08 22:53:39 node2 llama-server[299633]: 5.09.060.809 I srv  llama_server: model loaded
+Oct 08 22:53:39 node2 llama-server[299633]: 5.09.060.818 I srv  llama_server: listening on http://127.0.0.1:18050
+Oct 08 22:53:49 node2 llama-server[299633]: 5.19.400.150 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+Oct 08 22:53:49 node2 llama-server[299633]: 5.19.400.249 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+Oct 08 22:54:11 node2 llama-server[299633]: 5.40.690.211 I slot print_timing: id  0 | task 0 | prompt eval time =    8281.64 ms /    12 tokens (  690.14 ms per token,     1.45 tokens per second)
+Oct 08 22:54:11 node2 llama-server[299633]: 5.40.690.227 I slot print_timing: id  0 | task 0 |        eval time =   13008.28 ms /    16 tokens (  867.22 ms per token,     1.15 tokens per second)
+Oct 08 22:54:11 node2 llama-server[299633]: 5.40.690.228 I slot print_timing: id  0 | task 0 |       total time =   21289.92 ms /    28 tokens
+Oct 08 22:54:11 node2 llama-server[299633]: 5.40.690.235 I slot print_timing: id  0 | task 0 |    graphs reused =         15
+Oct 08 22:54:11 node2 llama-server[299633]: 5.40.690.289 I slot      release: id  0 | task 0 | stop processing: n_tokens = 27, truncated = 0
+Oct 08 22:54:11 node2 llama-server[299633]: 5.40.694.802 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 221698544827
+Oct 08 22:54:11 node2 llama-server[299633]: 5.40.696.727 I slot launch_slot_: id  0 | task 17 | processing task, is_child = 0
+Oct 08 22:55:50 node2 llama-server[299633]: 7.19.441.593 I slot print_timing: id  0 | task 17 | prompt eval time =   28058.10 ms /   132 tokens (  212.56 ms per token,     4.70 tokens per second)
+Oct 08 22:55:50 node2 llama-server[299633]: 7.19.441.599 I slot print_timing: id  0 | task 17 |        eval time =   70686.72 ms /    96 tokens (  744.07 ms per token,     1.34 tokens per second)
+Oct 08 22:55:50 node2 llama-server[299633]: 7.19.441.600 I slot print_timing: id  0 | task 17 |       total time =   98744.82 ms /   228 tokens
+Oct 08 22:55:50 node2 llama-server[299633]: 7.19.441.602 I slot print_timing: id  0 | task 17 |    graphs reused =        109
+Oct 08 22:55:50 node2 llama-server[299633]: 7.19.441.716 I slot      release: id  0 | task 17 | stop processing: n_tokens = 230, truncated = 0
+Oct 08 22:55:50 node2 llama-server[299633]: 7.19.445.582 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, f_sim_best = 1.000 (> 0.100 thold), f_keep = 0.587
+Oct 08 22:55:50 node2 llama-server[299633]: 7.19.445.774 I slot launch_slot_: id  0 | task 114 | processing task, is_child = 0
+Oct 08 22:55:50 node2 llama-server[299633]: 7.19.445.805 W slot   operator(): id  0 | task 114 | need to evaluate at least 1 token for each active slot (n_past = 135, task.n_tokens() = 135)
+Oct 08 22:55:50 node2 llama-server[299633]: 7.19.445.808 W slot   operator(): id  0 | task 114 | n_past was set to 134
+Oct 08 22:57:20 node2 llama-server[299633]: 8.50.365.191 I slot print_timing: id  0 | task 114 | prompt eval time =     704.79 ms /     1 tokens (  704.79 ms per token,     1.42 tokens per second)
+Oct 08 22:57:20 node2 llama-server[299633]: 8.50.365.199 I slot print_timing: id  0 | task 114 |        eval time =   90214.51 ms /    96 tokens (  949.63 ms per token,     1.05 tokens per second)
+Oct 08 22:57:20 node2 llama-server[299633]: 8.50.365.200 I slot print_timing: id  0 | task 114 |       total time =   90919.30 ms /    97 tokens
+Oct 08 22:57:20 node2 llama-server[299633]: 8.50.365.201 I slot print_timing: id  0 | task 114 |    graphs reused =        205
+Oct 08 22:57:20 node2 llama-server[299633]: 8.50.365.390 I slot      release: id  0 | task 114 | stop processing: n_tokens = 230, truncated = 0
+Oct 08 22:57:20 node2 llama-server[299633]: 8.50.370.212 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 221888219940
+Oct 08 22:57:20 node2 llama-server[299633]: 8.50.381.827 I slot launch_slot_: id  0 | task 211 | processing task, is_child = 0
+Oct 08 22:59:54 node2 llama-server[299633]: 11.23.576.494 I slot print_timing: id  0 | task 211 | n_gen =    100, tg =   0.76 t/s, tg_3s =   0.76 t/s
+Oct 08 22:59:58 node2 llama-server[299633]: 11.27.965.863 I slot print_timing: id  0 | task 211 | n_gen =    103, tg =   0.75 t/s, tg_3s =   0.68 t/s
+Oct 08 23:00:00 node2 llama-server[299633]: 11.29.473.233 I slot print_timing: id  0 | task 211 | prompt eval time =   22080.41 ms /    56 tokens (  394.29 ms per token,     2.54 tokens per second)
+Oct 08 23:00:00 node2 llama-server[299633]: 11.29.473.239 I slot print_timing: id  0 | task 211 |        eval time =  137010.96 ms /   104 tokens ( 1330.20 ms per token,     0.75 tokens per second)
+Oct 08 23:00:00 node2 llama-server[299633]: 11.29.473.240 I slot print_timing: id  0 | task 211 |       total time =  159091.36 ms /   160 tokens
+Oct 08 23:00:00 node2 llama-server[299633]: 11.29.473.242 I slot print_timing: id  0 | task 211 |    graphs reused =        307
+Oct 08 23:00:00 node2 llama-server[299633]: 11.29.473.425 I slot      release: id  0 | task 211 | stop processing: n_tokens = 162, truncated = 0
+Oct 08 23:00:00 node2 llama-server[299633]: 11.29.477.730 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 222047327964
+Oct 08 23:00:00 node2 llama-server[299633]: 11.29.485.683 I slot launch_slot_: id  0 | task 316 | processing task, is_child = 0
+Oct 08 23:02:52 node2 llama-server[299633]: 14.21.768.708 I slot print_timing: id  0 | task 316 | n_gen =    100, tg =   0.71 t/s, tg_3s =   0.71 t/s
+Oct 08 23:02:56 node2 llama-server[299633]: 14.25.723.844 I slot print_timing: id  0 | task 316 | n_gen =    103, tg =   0.71 t/s, tg_3s =   0.76 t/s
+Oct 08 23:03:00 node2 llama-server[299633]: 14.29.790.513 I slot print_timing: id  0 | task 316 | n_gen =    106, tg =   0.71 t/s, tg_3s =   0.74 t/s
+Oct 08 23:03:04 node2 llama-server[299633]: 14.34.295.451 I slot print_timing: id  0 | task 316 | n_gen =    109, tg =   0.71 t/s, tg_3s =   0.67 t/s
+Oct 08 23:03:08 node2 llama-server[299633]: 14.38.367.488 I slot print_timing: id  0 | task 316 | n_gen =    112, tg =   0.71 t/s, tg_3s =   0.74 t/s
+Oct 08 23:03:12 node2 llama-server[299633]: 14.42.346.830 I slot print_timing: id  0 | task 316 | n_gen =    115, tg =   0.71 t/s, tg_3s =   0.75 t/s
+Oct 08 23:03:17 node2 llama-server[299633]: 14.46.635.319 I slot print_timing: id  0 | task 316 | n_gen =    118, tg =   0.71 t/s, tg_3s =   0.70 t/s
+Oct 08 23:03:21 node2 llama-server[299633]: 14.51.123.904 I slot print_timing: id  0 | task 316 | n_gen =    121, tg =   0.71 t/s, tg_3s =   0.67 t/s
+Oct 08 23:03:26 node2 llama-server[299633]: 14.55.566.870 I slot print_timing: id  0 | task 316 | n_gen =    124, tg =   0.71 t/s, tg_3s =   0.68 t/s
+Oct 08 23:03:30 node2 llama-server[299633]: 14.59.830.050 I slot print_timing: id  0 | task 316 | n_gen =    127, tg =   0.71 t/s, tg_3s =   0.70 t/s
+Oct 08 23:03:33 node2 llama-server[299633]: 15.02.928.164 I slot print_timing: id  0 | task 316 | n_gen =    129, tg =   0.71 t/s, tg_3s =   0.65 t/s
+Oct 08 23:03:36 node2 llama-server[299633]: 15.06.009.351 I slot print_timing: id  0 | task 316 | n_gen =    131, tg =   0.71 t/s, tg_3s =   0.65 t/s
+Oct 08 23:03:40 node2 llama-server[299633]: 15.10.242.296 I slot print_timing: id  0 | task 316 | n_gen =    134, tg =   0.71 t/s, tg_3s =   0.71 t/s
+Oct 08 23:03:43 node2 llama-server[299633]: 15.13.263.221 I slot print_timing: id  0 | task 316 | n_gen =    136, tg =   0.71 t/s, tg_3s =   0.66 t/s
+Oct 08 23:03:48 node2 llama-server[299633]: 15.17.820.677 I slot print_timing: id  0 | task 316 | n_gen =    139, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:03:51 node2 llama-server[299633]: 15.20.862.589 I slot print_timing: id  0 | task 316 | n_gen =    141, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:03:55 node2 llama-server[299633]: 15.24.982.684 I slot print_timing: id  0 | task 316 | n_gen =    144, tg =   0.70 t/s, tg_3s =   0.73 t/s
+Oct 08 23:03:59 node2 llama-server[299633]: 15.29.314.523 I slot print_timing: id  0 | task 316 | n_gen =    147, tg =   0.70 t/s, tg_3s =   0.69 t/s
+Oct 08 23:04:04 node2 llama-server[299633]: 15.33.506.781 I slot print_timing: id  0 | task 316 | n_gen =    150, tg =   0.70 t/s, tg_3s =   0.72 t/s
+Oct 08 23:04:08 node2 llama-server[299633]: 15.37.690.017 I slot print_timing: id  0 | task 316 | n_gen =    153, tg =   0.70 t/s, tg_3s =   0.72 t/s
+Oct 08 23:04:12 node2 llama-server[299633]: 15.41.807.743 I slot print_timing: id  0 | task 316 | n_gen =    156, tg =   0.70 t/s, tg_3s =   0.73 t/s
+Oct 08 23:04:16 node2 llama-server[299633]: 15.46.082.351 I slot print_timing: id  0 | task 316 | n_gen =    159, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:04:21 node2 llama-server[299633]: 15.50.551.773 I slot print_timing: id  0 | task 316 | n_gen =    162, tg =   0.70 t/s, tg_3s =   0.67 t/s
+Oct 08 23:04:24 node2 llama-server[299633]: 15.53.604.705 I slot print_timing: id  0 | task 316 | n_gen =    164, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:04:28 node2 llama-server[299633]: 15.57.893.386 I slot print_timing: id  0 | task 316 | n_gen =    167, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:04:32 node2 llama-server[299633]: 16.01.948.964 I slot print_timing: id  0 | task 316 | n_gen =    170, tg =   0.70 t/s, tg_3s =   0.74 t/s
+Oct 08 23:04:36 node2 llama-server[299633]: 16.06.043.881 I slot print_timing: id  0 | task 316 | n_gen =    173, tg =   0.70 t/s, tg_3s =   0.73 t/s
+Oct 08 23:04:40 node2 llama-server[299633]: 16.10.277.605 I slot print_timing: id  0 | task 316 | n_gen =    176, tg =   0.70 t/s, tg_3s =   0.71 t/s
+Oct 08 23:04:45 node2 llama-server[299633]: 16.14.476.044 I slot print_timing: id  0 | task 316 | n_gen =    179, tg =   0.70 t/s, tg_3s =   0.71 t/s
+Oct 08 23:04:48 node2 llama-server[299633]: 16.17.506.334 I slot print_timing: id  0 | task 316 | n_gen =    181, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:04:51 node2 llama-server[299633]: 16.20.542.328 I slot print_timing: id  0 | task 316 | n_gen =    183, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:04:55 node2 llama-server[299633]: 16.24.818.388 I slot print_timing: id  0 | task 316 | n_gen =    186, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:04:59 node2 llama-server[299633]: 16.29.066.765 I slot print_timing: id  0 | task 316 | n_gen =    189, tg =   0.70 t/s, tg_3s =   0.71 t/s
+Oct 08 23:05:04 node2 llama-server[299633]: 16.33.562.455 I slot print_timing: id  0 | task 316 | n_gen =    192, tg =   0.70 t/s, tg_3s =   0.67 t/s
+Oct 08 23:05:07 node2 llama-server[299633]: 16.36.653.193 I slot print_timing: id  0 | task 316 | n_gen =    194, tg =   0.70 t/s, tg_3s =   0.65 t/s
+Oct 08 23:05:10 node2 llama-server[299633]: 16.39.716.510 I slot print_timing: id  0 | task 316 | n_gen =    196, tg =   0.70 t/s, tg_3s =   0.65 t/s
+Oct 08 23:05:14 node2 llama-server[299633]: 16.43.881.602 I slot print_timing: id  0 | task 316 | n_gen =    199, tg =   0.70 t/s, tg_3s =   0.72 t/s
+Oct 08 23:05:18 node2 llama-server[299633]: 16.48.008.793 I slot print_timing: id  0 | task 316 | n_gen =    202, tg =   0.70 t/s, tg_3s =   0.73 t/s
+Oct 08 23:05:22 node2 llama-server[299633]: 16.52.114.377 I slot print_timing: id  0 | task 316 | n_gen =    205, tg =   0.70 t/s, tg_3s =   0.73 t/s
+Oct 08 23:05:25 node2 llama-server[299633]: 16.55.118.601 I slot print_timing: id  0 | task 316 | n_gen =    207, tg =   0.70 t/s, tg_3s =   0.67 t/s
+Oct 08 23:05:29 node2 llama-server[299633]: 16.59.171.001 I slot print_timing: id  0 | task 316 | n_gen =    210, tg =   0.70 t/s, tg_3s =   0.74 t/s
+Oct 08 23:05:34 node2 llama-server[299633]: 17.03.435.746 I slot print_timing: id  0 | task 316 | n_gen =    213, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:05:38 node2 llama-server[299633]: 17.07.694.543 I slot print_timing: id  0 | task 316 | n_gen =    216, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:05:42 node2 llama-server[299633]: 17.12.026.364 I slot print_timing: id  0 | task 316 | n_gen =    219, tg =   0.70 t/s, tg_3s =   0.69 t/s
+Oct 08 23:05:45 node2 llama-server[299633]: 17.15.100.850 I slot print_timing: id  0 | task 316 | n_gen =    221, tg =   0.70 t/s, tg_3s =   0.65 t/s
+Oct 08 23:05:48 node2 llama-server[299633]: 17.18.124.098 I slot print_timing: id  0 | task 316 | n_gen =    223, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:05:51 node2 llama-server[299633]: 17.21.251.447 I slot print_timing: id  0 | task 316 | n_gen =    225, tg =   0.70 t/s, tg_3s =   0.64 t/s
+Oct 08 23:05:54 node2 llama-server[299633]: 17.24.424.475 I slot print_timing: id  0 | task 316 | n_gen =    227, tg =   0.70 t/s, tg_3s =   0.63 t/s
+Oct 08 23:05:58 node2 llama-server[299633]: 17.27.488.325 I slot print_timing: id  0 | task 316 | n_gen =    229, tg =   0.70 t/s, tg_3s =   0.65 t/s
+Oct 08 23:06:01 node2 llama-server[299633]: 17.30.624.687 I slot print_timing: id  0 | task 316 | n_gen =    231, tg =   0.70 t/s, tg_3s =   0.64 t/s
+Oct 08 23:06:04 node2 llama-server[299633]: 17.33.632.834 I slot print_timing: id  0 | task 316 | n_gen =    233, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:06:08 node2 llama-server[299633]: 17.38.086.156 I slot print_timing: id  0 | task 316 | n_gen =    236, tg =   0.70 t/s, tg_3s =   0.67 t/s
+Oct 08 23:06:11 node2 llama-server[299633]: 17.41.122.668 I slot print_timing: id  0 | task 316 | n_gen =    238, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:06:14 node2 llama-server[299633]: 17.44.183.548 I slot print_timing: id  0 | task 316 | n_gen =    240, tg =   0.70 t/s, tg_3s =   0.65 t/s
+Oct 08 23:06:18 node2 llama-server[299633]: 17.48.414.120 I slot print_timing: id  0 | task 316 | n_gen =    243, tg =   0.70 t/s, tg_3s =   0.71 t/s
+Oct 08 23:06:23 node2 llama-server[299633]: 17.52.661.524 I slot print_timing: id  0 | task 316 | n_gen =    246, tg =   0.70 t/s, tg_3s =   0.71 t/s
+Oct 08 23:06:27 node2 llama-server[299633]: 17.57.235.292 I slot print_timing: id  0 | task 316 | n_gen =    249, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:06:32 node2 llama-server[299633]: 18.01.527.864 I slot print_timing: id  0 | task 316 | n_gen =    252, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:06:35 node2 llama-server[299633]: 18.04.689.591 I slot print_timing: id  0 | task 316 | n_gen =    254, tg =   0.70 t/s, tg_3s =   0.63 t/s
+Oct 08 23:06:39 node2 llama-server[299633]: 18.09.147.032 I slot print_timing: id  0 | task 316 | n_gen =    257, tg =   0.70 t/s, tg_3s =   0.67 t/s
+Oct 08 23:06:44 node2 llama-server[299633]: 18.13.497.856 I slot print_timing: id  0 | task 316 | n_gen =    260, tg =   0.70 t/s, tg_3s =   0.69 t/s
+Oct 08 23:06:48 node2 llama-server[299633]: 18.18.016.806 I slot print_timing: id  0 | task 316 | n_gen =    263, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:06:53 node2 llama-server[299633]: 18.22.568.187 I slot print_timing: id  0 | task 316 | n_gen =    266, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:06:57 node2 llama-server[299633]: 18.26.861.240 I slot print_timing: id  0 | task 316 | n_gen =    269, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:07:01 node2 llama-server[299633]: 18.31.047.858 I slot print_timing: id  0 | task 316 | n_gen =    272, tg =   0.70 t/s, tg_3s =   0.72 t/s
+Oct 08 23:07:05 node2 llama-server[299633]: 18.35.393.578 I slot print_timing: id  0 | task 316 | n_gen =    275, tg =   0.70 t/s, tg_3s =   0.69 t/s
+Oct 08 23:07:10 node2 llama-server[299633]: 18.39.672.916 I slot print_timing: id  0 | task 316 | n_gen =    278, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:07:13 node2 llama-server[299633]: 18.42.980.189 I slot print_timing: id  0 | task 316 | n_gen =    280, tg =   0.70 t/s, tg_3s =   0.60 t/s
+Oct 08 23:07:17 node2 llama-server[299633]: 18.47.224.205 I slot print_timing: id  0 | task 316 | n_gen =    283, tg =   0.70 t/s, tg_3s =   0.71 t/s
+Oct 08 23:07:22 node2 llama-server[299633]: 18.51.560.010 I slot print_timing: id  0 | task 316 | n_gen =    286, tg =   0.70 t/s, tg_3s =   0.69 t/s
+Oct 08 23:07:26 node2 llama-server[299633]: 18.55.815.426 I slot print_timing: id  0 | task 316 | n_gen =    289, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:07:30 node2 llama-server[299633]: 19.00.076.002 I slot print_timing: id  0 | task 316 | n_gen =    292, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:07:34 node2 llama-server[299633]: 19.04.192.548 I slot print_timing: id  0 | task 316 | n_gen =    295, tg =   0.70 t/s, tg_3s =   0.73 t/s
+Oct 08 23:07:39 node2 llama-server[299633]: 19.08.438.170 I slot print_timing: id  0 | task 316 | n_gen =    298, tg =   0.70 t/s, tg_3s =   0.71 t/s
+Oct 08 23:07:43 node2 llama-server[299633]: 19.12.693.657 I slot print_timing: id  0 | task 316 | n_gen =    301, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:07:47 node2 llama-server[299633]: 19.16.884.138 I slot print_timing: id  0 | task 316 | n_gen =    304, tg =   0.70 t/s, tg_3s =   0.72 t/s
+Oct 08 23:07:51 node2 llama-server[299633]: 19.21.251.917 I slot print_timing: id  0 | task 316 | n_gen =    307, tg =   0.70 t/s, tg_3s =   0.69 t/s
+Oct 08 23:07:55 node2 llama-server[299633]: 19.25.423.161 I slot print_timing: id  0 | task 316 | n_gen =    310, tg =   0.70 t/s, tg_3s =   0.72 t/s
+Oct 08 23:08:00 node2 llama-server[299633]: 19.29.853.807 I slot print_timing: id  0 | task 316 | n_gen =    313, tg =   0.70 t/s, tg_3s =   0.68 t/s
+Oct 08 23:08:04 node2 llama-server[299633]: 19.34.232.521 I slot print_timing: id  0 | task 316 | n_gen =    316, tg =   0.70 t/s, tg_3s =   0.69 t/s
+Oct 08 23:08:09 node2 llama-server[299633]: 19.38.553.068 I slot print_timing: id  0 | task 316 | n_gen =    319, tg =   0.70 t/s, tg_3s =   0.69 t/s
+Oct 08 23:08:13 node2 llama-server[299633]: 19.42.840.058 I slot print_timing: id  0 | task 316 | n_gen =    322, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:08:17 node2 llama-server[299633]: 19.47.102.828 I slot print_timing: id  0 | task 316 | n_gen =    325, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:08:20 node2 llama-server[299633]: 19.50.234.718 I slot print_timing: id  0 | task 316 | n_gen =    327, tg =   0.70 t/s, tg_3s =   0.64 t/s
+Oct 08 23:08:25 node2 llama-server[299633]: 19.54.543.401 I slot print_timing: id  0 | task 316 | n_gen =    330, tg =   0.70 t/s, tg_3s =   0.70 t/s
+Oct 08 23:08:29 node2 llama-server[299633]: 19.58.594.065 I slot print_timing: id  0 | task 316 | n_gen =    333, tg =   0.70 t/s, tg_3s =   0.74 t/s
+Oct 08 23:08:32 node2 llama-server[299633]: 20.01.621.500 I slot print_timing: id  0 | task 316 | n_gen =    335, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:08:36 node2 llama-server[299633]: 20.05.870.230 I slot print_timing: id  0 | task 316 | n_gen =    338, tg =   0.70 t/s, tg_3s =   0.71 t/s
+Oct 08 23:08:40 node2 llama-server[299633]: 20.10.017.748 I slot print_timing: id  0 | task 316 | n_gen =    341, tg =   0.70 t/s, tg_3s =   0.72 t/s
+Oct 08 23:08:45 node2 llama-server[299633]: 20.14.469.656 I slot print_timing: id  0 | task 316 | n_gen =    344, tg =   0.70 t/s, tg_3s =   0.67 t/s
+Oct 08 23:08:48 node2 llama-server[299633]: 20.17.840.158 I slot print_timing: id  0 | task 316 | n_gen =    346, tg =   0.70 t/s, tg_3s =   0.59 t/s
+Oct 08 23:08:51 node2 llama-server[299633]: 20.20.918.684 I slot print_timing: id  0 | task 316 | n_gen =    348, tg =   0.70 t/s, tg_3s =   0.65 t/s
+Oct 08 23:08:54 node2 llama-server[299633]: 20.23.937.976 I slot print_timing: id  0 | task 316 | n_gen =    350, tg =   0.70 t/s, tg_3s =   0.66 t/s
+Oct 08 23:08:57 node2 llama-server[299633]: 20.27.134.874 I slot print_timing: id  0 | task 316 | n_gen =    352, tg =   0.69 t/s, tg_3s =   0.63 t/s
+Oct 08 23:09:00 node2 llama-server[299633]: 20.30.147.540 I slot print_timing: id  0 | task 316 | n_gen =    354, tg =   0.69 t/s, tg_3s =   0.66 t/s
+Oct 08 23:09:04 node2 llama-server[299633]: 20.34.411.121 I slot print_timing: id  0 | task 316 | n_gen =    357, tg =   0.69 t/s, tg_3s =   0.70 t/s
+Oct 08 23:09:08 node2 llama-server[299633]: 20.37.533.859 I slot print_timing: id  0 | task 316 | n_gen =    359, tg =   0.69 t/s, tg_3s =   0.64 t/s
+Oct 08 23:09:11 node2 llama-server[299633]: 20.40.661.590 I slot print_timing: id  0 | task 316 | n_gen =    361, tg =   0.69 t/s, tg_3s =   0.64 t/s
+Oct 08 23:09:15 node2 llama-server[299633]: 20.45.063.667 I slot print_timing: id  0 | task 316 | n_gen =    364, tg =   0.69 t/s, tg_3s =   0.68 t/s
+Oct 08 23:09:18 node2 llama-server[299633]: 20.48.411.667 I slot print_timing: id  0 | task 316 | n_gen =    366, tg =   0.69 t/s, tg_3s =   0.60 t/s
+Oct 08 23:09:23 node2 llama-server[299633]: 20.52.780.968 I slot print_timing: id  0 | task 316 | n_gen =    369, tg =   0.69 t/s, tg_3s =   0.69 t/s
+Oct 08 23:09:26 node2 llama-server[299633]: 20.55.854.823 I slot print_timing: id  0 | task 316 | n_gen =    371, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:09:29 node2 llama-server[299633]: 20.59.034.397 I slot print_timing: id  0 | task 316 | n_gen =    373, tg =   0.69 t/s, tg_3s =   0.63 t/s
+Oct 08 23:09:32 node2 llama-server[299633]: 21.02.081.866 I slot print_timing: id  0 | task 316 | n_gen =    375, tg =   0.69 t/s, tg_3s =   0.66 t/s
+Oct 08 23:09:37 node2 llama-server[299633]: 21.06.441.454 I slot print_timing: id  0 | task 316 | n_gen =    378, tg =   0.69 t/s, tg_3s =   0.69 t/s
+Oct 08 23:09:40 node2 llama-server[299633]: 21.09.553.405 I slot print_timing: id  0 | task 316 | n_gen =    380, tg =   0.69 t/s, tg_3s =   0.64 t/s
+Oct 08 23:09:44 node2 llama-server[299633]: 21.13.724.639 I slot print_timing: id  0 | task 316 | n_gen =    383, tg =   0.69 t/s, tg_3s =   0.72 t/s
+Oct 08 23:09:48 node2 llama-server[299633]: 21.17.920.404 I slot print_timing: id  0 | task 316 | n_gen =    386, tg =   0.69 t/s, tg_3s =   0.72 t/s
+Oct 08 23:09:51 node2 llama-server[299633]: 21.21.120.205 I slot print_timing: id  0 | task 316 | n_gen =    388, tg =   0.69 t/s, tg_3s =   0.63 t/s
+Oct 08 23:09:54 node2 llama-server[299633]: 21.24.252.308 I slot print_timing: id  0 | task 316 | n_gen =    390, tg =   0.69 t/s, tg_3s =   0.64 t/s
+Oct 08 23:09:59 node2 llama-server[299633]: 21.28.666.944 I slot print_timing: id  0 | task 316 | n_gen =    393, tg =   0.69 t/s, tg_3s =   0.68 t/s
+Oct 08 23:10:03 node2 llama-server[299633]: 21.32.889.525 I slot print_timing: id  0 | task 316 | n_gen =    396, tg =   0.69 t/s, tg_3s =   0.71 t/s
+Oct 08 23:10:07 node2 llama-server[299633]: 21.37.072.919 I slot print_timing: id  0 | task 316 | n_gen =    399, tg =   0.69 t/s, tg_3s =   0.72 t/s
+Oct 08 23:10:11 node2 llama-server[299633]: 21.41.424.658 I slot print_timing: id  0 | task 316 | n_gen =    402, tg =   0.69 t/s, tg_3s =   0.69 t/s
+Oct 08 23:10:15 node2 llama-server[299633]: 21.44.505.261 I slot print_timing: id  0 | task 316 | n_gen =    404, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:10:19 node2 llama-server[299633]: 21.48.803.859 I slot print_timing: id  0 | task 316 | n_gen =    407, tg =   0.69 t/s, tg_3s =   0.70 t/s
+Oct 08 23:10:23 node2 llama-server[299633]: 21.53.084.272 I slot print_timing: id  0 | task 316 | n_gen =    410, tg =   0.69 t/s, tg_3s =   0.70 t/s
+Oct 08 23:10:28 node2 llama-server[299633]: 21.57.455.742 I slot print_timing: id  0 | task 316 | n_gen =    413, tg =   0.69 t/s, tg_3s =   0.69 t/s
+Oct 08 23:10:31 node2 llama-server[299633]: 22.00.459.160 I slot print_timing: id  0 | task 316 | n_gen =    415, tg =   0.69 t/s, tg_3s =   0.67 t/s
+Oct 08 23:10:34 node2 llama-server[299633]: 22.03.542.682 I slot print_timing: id  0 | task 316 | n_gen =    417, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:10:37 node2 llama-server[299633]: 22.06.742.993 I slot print_timing: id  0 | task 316 | n_gen =    419, tg =   0.69 t/s, tg_3s =   0.62 t/s
+Oct 08 23:10:40 node2 llama-server[299633]: 22.09.790.562 I slot print_timing: id  0 | task 316 | n_gen =    421, tg =   0.69 t/s, tg_3s =   0.66 t/s
+Oct 08 23:10:44 node2 llama-server[299633]: 22.14.182.537 I slot print_timing: id  0 | task 316 | n_gen =    424, tg =   0.69 t/s, tg_3s =   0.68 t/s
+Oct 08 23:10:47 node2 llama-server[299633]: 22.17.280.645 I slot print_timing: id  0 | task 316 | n_gen =    426, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:10:52 node2 llama-server[299633]: 22.21.738.460 I slot print_timing: id  0 | task 316 | n_gen =    429, tg =   0.69 t/s, tg_3s =   0.67 t/s
+Oct 08 23:10:56 node2 llama-server[299633]: 22.26.168.378 I slot print_timing: id  0 | task 316 | n_gen =    432, tg =   0.69 t/s, tg_3s =   0.68 t/s
+Oct 08 23:11:01 node2 llama-server[299633]: 22.30.490.255 I slot print_timing: id  0 | task 316 | n_gen =    435, tg =   0.69 t/s, tg_3s =   0.69 t/s
+Oct 08 23:11:04 node2 llama-server[299633]: 22.33.552.700 I slot print_timing: id  0 | task 316 | n_gen =    437, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:11:08 node2 llama-server[299633]: 22.37.963.009 I slot print_timing: id  0 | task 316 | n_gen =    440, tg =   0.69 t/s, tg_3s =   0.68 t/s
+Oct 08 23:11:12 node2 llama-server[299633]: 22.41.989.639 I slot print_timing: id  0 | task 316 | n_gen =    443, tg =   0.69 t/s, tg_3s =   0.75 t/s
+Oct 08 23:11:16 node2 llama-server[299633]: 22.46.215.518 I slot print_timing: id  0 | task 316 | n_gen =    446, tg =   0.69 t/s, tg_3s =   0.71 t/s
+Oct 08 23:11:20 node2 llama-server[299633]: 22.49.489.336 I slot print_timing: id  0 | task 316 | n_gen =    448, tg =   0.69 t/s, tg_3s =   0.61 t/s
+Oct 08 23:11:23 node2 llama-server[299633]: 22.52.845.485 I slot print_timing: id  0 | task 316 | n_gen =    450, tg =   0.69 t/s, tg_3s =   0.60 t/s
+Oct 08 23:11:27 node2 llama-server[299633]: 22.57.147.190 I slot print_timing: id  0 | task 316 | n_gen =    453, tg =   0.69 t/s, tg_3s =   0.70 t/s
+Oct 08 23:11:32 node2 llama-server[299633]: 23.01.718.521 I slot print_timing: id  0 | task 316 | n_gen =    456, tg =   0.69 t/s, tg_3s =   0.66 t/s
+Oct 08 23:11:35 node2 llama-server[299633]: 23.04.777.291 I slot print_timing: id  0 | task 316 | n_gen =    458, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:11:38 node2 llama-server[299633]: 23.07.917.701 I slot print_timing: id  0 | task 316 | n_gen =    460, tg =   0.69 t/s, tg_3s =   0.64 t/s
+Oct 08 23:11:42 node2 llama-server[299633]: 23.12.325.099 I slot print_timing: id  0 | task 316 | n_gen =    463, tg =   0.69 t/s, tg_3s =   0.68 t/s
+Oct 08 23:11:45 node2 llama-server[299633]: 23.15.325.273 I slot print_timing: id  0 | task 316 | n_gen =    465, tg =   0.69 t/s, tg_3s =   0.67 t/s
+Oct 08 23:11:50 node2 llama-server[299633]: 23.19.759.166 I slot print_timing: id  0 | task 316 | n_gen =    468, tg =   0.69 t/s, tg_3s =   0.68 t/s
+Oct 08 23:11:54 node2 llama-server[299633]: 23.23.944.161 I slot print_timing: id  0 | task 316 | n_gen =    471, tg =   0.69 t/s, tg_3s =   0.72 t/s
+Oct 08 23:11:58 node2 llama-server[299633]: 23.28.343.993 I slot print_timing: id  0 | task 316 | n_gen =    474, tg =   0.69 t/s, tg_3s =   0.68 t/s
+Oct 08 23:12:02 node2 llama-server[299633]: 23.31.429.921 I slot print_timing: id  0 | task 316 | n_gen =    476, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:12:05 node2 llama-server[299633]: 23.34.628.043 I slot print_timing: id  0 | task 316 | n_gen =    478, tg =   0.69 t/s, tg_3s =   0.63 t/s
+Oct 08 23:12:08 node2 llama-server[299633]: 23.37.719.401 I slot print_timing: id  0 | task 316 | n_gen =    480, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:12:11 node2 llama-server[299633]: 23.40.861.291 I slot print_timing: id  0 | task 316 | n_gen =    482, tg =   0.69 t/s, tg_3s =   0.64 t/s
+Oct 08 23:12:15 node2 llama-server[299633]: 23.45.213.864 I slot print_timing: id  0 | task 316 | n_gen =    485, tg =   0.69 t/s, tg_3s =   0.69 t/s
+Oct 08 23:12:18 node2 llama-server[299633]: 23.48.224.127 I slot print_timing: id  0 | task 316 | n_gen =    487, tg =   0.69 t/s, tg_3s =   0.66 t/s
+Oct 08 23:12:21 node2 llama-server[299633]: 23.51.385.715 I slot print_timing: id  0 | task 316 | n_gen =    489, tg =   0.69 t/s, tg_3s =   0.63 t/s
+Oct 08 23:12:26 node2 llama-server[299633]: 23.55.921.905 I slot print_timing: id  0 | task 316 | n_gen =    492, tg =   0.69 t/s, tg_3s =   0.66 t/s
+Oct 08 23:12:30 node2 llama-server[299633]: 24.00.259.690 I slot print_timing: id  0 | task 316 | n_gen =    495, tg =   0.69 t/s, tg_3s =   0.69 t/s
+Oct 08 23:12:33 node2 llama-server[299633]: 24.03.397.399 I slot print_timing: id  0 | task 316 | n_gen =    497, tg =   0.69 t/s, tg_3s =   0.64 t/s
+Oct 08 23:12:38 node2 llama-server[299633]: 24.07.763.219 I slot print_timing: id  0 | task 316 | n_gen =    500, tg =   0.69 t/s, tg_3s =   0.69 t/s
+Oct 08 23:12:41 node2 llama-server[299633]: 24.10.856.326 I slot print_timing: id  0 | task 316 | n_gen =    502, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:12:45 node2 llama-server[299633]: 24.15.137.292 I slot print_timing: id  0 | task 316 | n_gen =    505, tg =   0.69 t/s, tg_3s =   0.70 t/s
+Oct 08 23:12:48 node2 llama-server[299633]: 24.18.210.234 I slot print_timing: id  0 | task 316 | n_gen =    507, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:12:51 node2 llama-server[299633]: 24.21.287.221 I slot print_timing: id  0 | task 316 | n_gen =    509, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:12:55 node2 llama-server[299633]: 24.24.521.030 I slot print_timing: id  0 | task 316 | n_gen =    511, tg =   0.69 t/s, tg_3s =   0.62 t/s
+Oct 08 23:12:58 node2 llama-server[299633]: 24.27.633.322 I slot print_timing: id  0 | task 316 | n_gen =    513, tg =   0.69 t/s, tg_3s =   0.64 t/s
+Oct 08 23:13:02 node2 llama-server[299633]: 24.32.134.589 I slot print_timing: id  0 | task 316 | n_gen =    516, tg =   0.69 t/s, tg_3s =   0.67 t/s
+Oct 08 23:13:07 node2 llama-server[299633]: 24.36.714.842 I slot print_timing: id  0 | task 316 | n_gen =    519, tg =   0.69 t/s, tg_3s =   0.65 t/s
+Oct 08 23:13:11 node2 llama-server[299633]: 24.41.223.104 I slot print_timing: id  0 | task 316 | n_gen =    522, tg =   0.69 t/s, tg_3s =   0.67 t/s
+Oct 08 23:13:15 node2 llama-server[299633]: 24.44.626.025 I slot print_timing: id  0 | task 316 | n_gen =    524, tg =   0.69 t/s, tg_3s =   0.59 t/s
+Oct 08 23:13:18 node2 llama-server[299633]: 24.47.834.969 I slot print_timing: id  0 | task 316 | n_gen =    526, tg =   0.69 t/s, tg_3s =   0.62 t/s
+Oct 08 23:13:21 node2 llama-server[299633]: 24.51.132.229 I slot print_timing: id  0 | task 316 | n_gen =    528, tg =   0.69 t/s, tg_3s =   0.61 t/s
+Oct 08 23:13:25 node2 llama-server[299633]: 24.54.440.536 I slot print_timing: id  0 | task 316 | n_gen =    530, tg =   0.68 t/s, tg_3s =   0.60 t/s
+Oct 08 23:13:28 node2 llama-server[299633]: 24.57.591.668 I slot print_timing: id  0 | task 316 | n_gen =    532, tg =   0.68 t/s, tg_3s =   0.63 t/s
+Oct 08 23:13:32 node2 llama-server[299633]: 25.01.814.635 I slot print_timing: id  0 | task 316 | n_gen =    535, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:13:36 node2 llama-server[299633]: 25.06.058.583 I slot print_timing: id  0 | task 316 | n_gen =    538, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:13:40 node2 llama-server[299633]: 25.10.407.858 I slot print_timing: id  0 | task 316 | n_gen =    541, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:13:44 node2 llama-server[299633]: 25.13.433.881 I slot print_timing: id  0 | task 316 | n_gen =    543, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:13:48 node2 llama-server[299633]: 25.17.915.866 I slot print_timing: id  0 | task 316 | n_gen =    546, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:13:52 node2 llama-server[299633]: 25.21.903.768 I slot print_timing: id  0 | task 316 | n_gen =    549, tg =   0.68 t/s, tg_3s =   0.75 t/s
+Oct 08 23:13:56 node2 llama-server[299633]: 25.26.016.929 I slot print_timing: id  0 | task 316 | n_gen =    552, tg =   0.69 t/s, tg_3s =   0.73 t/s
+Oct 08 23:14:00 node2 llama-server[299633]: 25.30.257.192 I slot print_timing: id  0 | task 316 | n_gen =    555, tg =   0.69 t/s, tg_3s =   0.71 t/s
+Oct 08 23:14:03 node2 llama-server[299633]: 25.33.302.925 I slot print_timing: id  0 | task 316 | n_gen =    557, tg =   0.69 t/s, tg_3s =   0.66 t/s
+Oct 08 23:14:06 node2 llama-server[299633]: 25.36.304.956 I slot print_timing: id  0 | task 316 | n_gen =    559, tg =   0.69 t/s, tg_3s =   0.67 t/s
+Oct 08 23:14:11 node2 llama-server[299633]: 25.40.915.083 I slot print_timing: id  0 | task 316 | n_gen =    562, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:14:15 node2 llama-server[299633]: 25.45.322.126 I slot print_timing: id  0 | task 316 | n_gen =    565, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:14:20 node2 llama-server[299633]: 25.49.749.217 I slot print_timing: id  0 | task 316 | n_gen =    568, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:14:24 node2 llama-server[299633]: 25.54.006.603 I slot print_timing: id  0 | task 316 | n_gen =    571, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:14:28 node2 llama-server[299633]: 25.58.377.247 I slot print_timing: id  0 | task 316 | n_gen =    574, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:14:33 node2 llama-server[299633]: 26.02.730.778 I slot print_timing: id  0 | task 316 | n_gen =    577, tg =   0.69 t/s, tg_3s =   0.69 t/s
+Oct 08 23:14:37 node2 llama-server[299633]: 26.06.800.358 I slot print_timing: id  0 | task 316 | n_gen =    580, tg =   0.69 t/s, tg_3s =   0.74 t/s
+Oct 08 23:14:41 node2 llama-server[299633]: 26.11.081.510 I slot print_timing: id  0 | task 316 | n_gen =    583, tg =   0.69 t/s, tg_3s =   0.70 t/s
+Oct 08 23:14:44 node2 llama-server[299633]: 26.14.244.433 I slot print_timing: id  0 | task 316 | n_gen =    585, tg =   0.69 t/s, tg_3s =   0.63 t/s
+Oct 08 23:14:49 node2 llama-server[299633]: 26.18.644.356 I slot print_timing: id  0 | task 316 | n_gen =    588, tg =   0.69 t/s, tg_3s =   0.68 t/s
+Oct 08 23:14:53 node2 llama-server[299633]: 26.23.211.346 I slot print_timing: id  0 | task 316 | n_gen =    591, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:14:56 node2 llama-server[299633]: 26.26.286.063 I slot print_timing: id  0 | task 316 | n_gen =    593, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:15:01 node2 llama-server[299633]: 26.30.671.702 I slot print_timing: id  0 | task 316 | n_gen =    596, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:15:04 node2 llama-server[299633]: 26.33.744.006 I slot print_timing: id  0 | task 316 | n_gen =    598, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:15:08 node2 llama-server[299633]: 26.37.853.678 I slot print_timing: id  0 | task 316 | n_gen =    601, tg =   0.68 t/s, tg_3s =   0.73 t/s
+Oct 08 23:15:11 node2 llama-server[299633]: 26.41.329.772 I slot print_timing: id  0 | task 316 | n_gen =    603, tg =   0.68 t/s, tg_3s =   0.58 t/s
+Oct 08 23:15:16 node2 llama-server[299633]: 26.45.738.798 I slot print_timing: id  0 | task 316 | n_gen =    606, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:15:19 node2 llama-server[299633]: 26.48.856.314 I slot print_timing: id  0 | task 316 | n_gen =    608, tg =   0.68 t/s, tg_3s =   0.64 t/s
+Oct 08 23:15:23 node2 llama-server[299633]: 26.53.114.350 I slot print_timing: id  0 | task 316 | n_gen =    611, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:15:28 node2 llama-server[299633]: 26.57.642.214 I slot print_timing: id  0 | task 316 | n_gen =    614, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:15:31 node2 llama-server[299633]: 27.00.722.624 I slot print_timing: id  0 | task 316 | n_gen =    616, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:15:35 node2 llama-server[299633]: 27.04.956.441 I slot print_timing: id  0 | task 316 | n_gen =    619, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:15:38 node2 llama-server[299633]: 27.08.060.516 I slot print_timing: id  0 | task 316 | n_gen =    621, tg =   0.68 t/s, tg_3s =   0.64 t/s
+Oct 08 23:15:42 node2 llama-server[299633]: 27.12.359.730 I slot print_timing: id  0 | task 316 | n_gen =    624, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:15:47 node2 llama-server[299633]: 27.16.617.521 I slot print_timing: id  0 | task 316 | n_gen =    627, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:15:51 node2 llama-server[299633]: 27.20.857.319 I slot print_timing: id  0 | task 316 | n_gen =    630, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:15:55 node2 llama-server[299633]: 27.25.045.112 I slot print_timing: id  0 | task 316 | n_gen =    633, tg =   0.68 t/s, tg_3s =   0.72 t/s
+Oct 08 23:16:00 node2 llama-server[299633]: 27.29.529.974 I slot print_timing: id  0 | task 316 | n_gen =    636, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:16:04 node2 llama-server[299633]: 27.33.860.407 I slot print_timing: id  0 | task 316 | n_gen =    639, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:16:08 node2 llama-server[299633]: 27.38.278.546 I slot print_timing: id  0 | task 316 | n_gen =    642, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:16:11 node2 llama-server[299633]: 27.41.299.593 I slot print_timing: id  0 | task 316 | n_gen =    644, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:16:15 node2 llama-server[299633]: 27.44.460.936 I slot print_timing: id  0 | task 316 | n_gen =    646, tg =   0.68 t/s, tg_3s =   0.63 t/s
+Oct 08 23:16:18 node2 llama-server[299633]: 27.47.600.411 I slot print_timing: id  0 | task 316 | n_gen =    648, tg =   0.68 t/s, tg_3s =   0.64 t/s
+Oct 08 23:16:21 node2 llama-server[299633]: 27.50.638.097 I slot print_timing: id  0 | task 316 | n_gen =    650, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:16:25 node2 llama-server[299633]: 27.54.878.029 I slot print_timing: id  0 | task 316 | n_gen =    653, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:16:29 node2 llama-server[299633]: 27.59.427.019 I slot print_timing: id  0 | task 316 | n_gen =    656, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:16:33 node2 llama-server[299633]: 28.02.455.028 I slot print_timing: id  0 | task 316 | n_gen =    658, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:16:36 node2 llama-server[299633]: 28.05.480.739 I slot print_timing: id  0 | task 316 | n_gen =    660, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:16:40 node2 llama-server[299633]: 28.09.851.494 I slot print_timing: id  0 | task 316 | n_gen =    663, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:16:44 node2 llama-server[299633]: 28.14.006.379 I slot print_timing: id  0 | task 316 | n_gen =    666, tg =   0.68 t/s, tg_3s =   0.72 t/s
+Oct 08 23:16:48 node2 llama-server[299633]: 28.18.286.535 I slot print_timing: id  0 | task 316 | n_gen =    669, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:16:53 node2 llama-server[299633]: 28.22.488.790 I slot print_timing: id  0 | task 316 | n_gen =    672, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:16:57 node2 llama-server[299633]: 28.26.548.807 I slot print_timing: id  0 | task 316 | n_gen =    675, tg =   0.68 t/s, tg_3s =   0.74 t/s
+Oct 08 23:17:01 node2 llama-server[299633]: 28.30.972.215 I slot print_timing: id  0 | task 316 | n_gen =    678, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:17:04 node2 llama-server[299633]: 28.34.074.211 I slot print_timing: id  0 | task 316 | n_gen =    680, tg =   0.68 t/s, tg_3s =   0.64 t/s
+Oct 08 23:17:08 node2 llama-server[299633]: 28.38.414.101 I slot print_timing: id  0 | task 316 | n_gen =    683, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:17:13 node2 llama-server[299633]: 28.42.685.760 I slot print_timing: id  0 | task 316 | n_gen =    686, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:17:16 node2 llama-server[299633]: 28.45.698.987 I slot print_timing: id  0 | task 316 | n_gen =    688, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:17:19 node2 llama-server[299633]: 28.48.794.143 I slot print_timing: id  0 | task 316 | n_gen =    690, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:17:22 node2 llama-server[299633]: 28.51.834.458 I slot print_timing: id  0 | task 316 | n_gen =    692, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:17:26 node2 llama-server[299633]: 28.56.311.230 I slot print_timing: id  0 | task 316 | n_gen =    695, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:17:30 node2 llama-server[299633]: 28.59.586.417 I slot print_timing: id  0 | task 316 | n_gen =    697, tg =   0.68 t/s, tg_3s =   0.61 t/s
+Oct 08 23:17:33 node2 llama-server[299633]: 29.02.590.701 I slot print_timing: id  0 | task 316 | n_gen =    699, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:17:37 node2 llama-server[299633]: 29.06.486.068 I slot print_timing: id  0 | task 316 | n_gen =    702, tg =   0.68 t/s, tg_3s =   0.77 t/s
+Oct 08 23:17:41 node2 llama-server[299633]: 29.10.798.105 I slot print_timing: id  0 | task 316 | n_gen =    705, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:17:44 node2 llama-server[299633]: 29.13.829.018 I slot print_timing: id  0 | task 316 | n_gen =    707, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:17:48 node2 llama-server[299633]: 29.18.287.767 I slot print_timing: id  0 | task 316 | n_gen =    710, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:17:51 node2 llama-server[299633]: 29.21.291.224 I slot print_timing: id  0 | task 316 | n_gen =    712, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:17:54 node2 llama-server[299633]: 29.24.328.300 I slot print_timing: id  0 | task 316 | n_gen =    714, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:17:59 node2 llama-server[299633]: 29.28.610.782 I slot print_timing: id  0 | task 316 | n_gen =    717, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:18:02 node2 llama-server[299633]: 29.31.667.924 I slot print_timing: id  0 | task 316 | n_gen =    719, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:18:06 node2 llama-server[299633]: 29.35.955.397 I slot print_timing: id  0 | task 316 | n_gen =    722, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:18:09 node2 llama-server[299633]: 29.39.052.839 I slot print_timing: id  0 | task 316 | n_gen =    724, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:18:12 node2 llama-server[299633]: 29.42.256.417 I slot print_timing: id  0 | task 316 | n_gen =    726, tg =   0.68 t/s, tg_3s =   0.62 t/s
+Oct 08 23:18:16 node2 llama-server[299633]: 29.45.450.147 I slot print_timing: id  0 | task 316 | n_gen =    728, tg =   0.68 t/s, tg_3s =   0.63 t/s
+Oct 08 23:18:19 node2 llama-server[299633]: 29.48.548.154 I slot print_timing: id  0 | task 316 | n_gen =    730, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:18:23 node2 llama-server[299633]: 29.52.964.094 I slot print_timing: id  0 | task 316 | n_gen =    733, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:18:27 node2 llama-server[299633]: 29.57.376.388 I slot print_timing: id  0 | task 316 | n_gen =    736, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:18:31 node2 llama-server[299633]: 30.00.542.761 I slot print_timing: id  0 | task 316 | n_gen =    738, tg =   0.68 t/s, tg_3s =   0.63 t/s
+Oct 08 23:18:34 node2 llama-server[299633]: 30.03.635.980 I slot print_timing: id  0 | task 316 | n_gen =    740, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:18:38 node2 llama-server[299633]: 30.08.008.988 I slot print_timing: id  0 | task 316 | n_gen =    743, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:18:43 node2 llama-server[299633]: 30.12.540.296 I slot print_timing: id  0 | task 316 | n_gen =    746, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:18:47 node2 llama-server[299633]: 30.16.815.208 I slot print_timing: id  0 | task 316 | n_gen =    749, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:18:50 node2 llama-server[299633]: 30.19.872.736 I slot print_timing: id  0 | task 316 | n_gen =    751, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:18:54 node2 llama-server[299633]: 30.23.928.923 I slot print_timing: id  0 | task 316 | n_gen =    754, tg =   0.68 t/s, tg_3s =   0.74 t/s
+Oct 08 23:18:57 node2 llama-server[299633]: 30.27.333.629 I slot print_timing: id  0 | task 316 | n_gen =    756, tg =   0.68 t/s, tg_3s =   0.59 t/s
+Oct 08 23:19:02 node2 llama-server[299633]: 30.31.747.502 I slot print_timing: id  0 | task 316 | n_gen =    759, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:19:05 node2 llama-server[299633]: 30.34.852.136 I slot print_timing: id  0 | task 316 | n_gen =    761, tg =   0.68 t/s, tg_3s =   0.64 t/s
+Oct 08 23:19:09 node2 llama-server[299633]: 30.39.266.015 I slot print_timing: id  0 | task 316 | n_gen =    764, tg =   0.68 t/s, tg_3s =   0.68 t/s
+Oct 08 23:19:14 node2 llama-server[299633]: 30.43.480.637 I slot print_timing: id  0 | task 316 | n_gen =    767, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:19:18 node2 llama-server[299633]: 30.47.756.984 I slot print_timing: id  0 | task 316 | n_gen =    770, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:19:21 node2 llama-server[299633]: 30.50.775.672 I slot print_timing: id  0 | task 316 | n_gen =    772, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:19:25 node2 llama-server[299633]: 30.55.058.856 I slot print_timing: id  0 | task 316 | n_gen =    775, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:19:30 node2 llama-server[299633]: 30.59.521.192 I slot print_timing: id  0 | task 316 | n_gen =    778, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:19:34 node2 llama-server[299633]: 31.03.679.412 I slot print_timing: id  0 | task 316 | n_gen =    781, tg =   0.68 t/s, tg_3s =   0.72 t/s
+Oct 08 23:19:37 node2 llama-server[299633]: 31.06.902.482 I slot print_timing: id  0 | task 316 | n_gen =    783, tg =   0.68 t/s, tg_3s =   0.62 t/s
+Oct 08 23:19:41 node2 llama-server[299633]: 31.11.009.957 I slot print_timing: id  0 | task 316 | n_gen =    786, tg =   0.68 t/s, tg_3s =   0.73 t/s
+Oct 08 23:19:45 node2 llama-server[299633]: 31.15.132.407 I slot print_timing: id  0 | task 316 | n_gen =    789, tg =   0.68 t/s, tg_3s =   0.73 t/s
+Oct 08 23:19:50 node2 llama-server[299633]: 31.19.429.682 I slot print_timing: id  0 | task 316 | n_gen =    792, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:19:54 node2 llama-server[299633]: 31.23.649.221 I slot print_timing: id  0 | task 316 | n_gen =    795, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:19:58 node2 llama-server[299633]: 31.27.757.384 I slot print_timing: id  0 | task 316 | n_gen =    798, tg =   0.68 t/s, tg_3s =   0.73 t/s
+Oct 08 23:20:02 node2 llama-server[299633]: 31.32.008.805 I slot print_timing: id  0 | task 316 | n_gen =    801, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:20:05 node2 llama-server[299633]: 31.35.121.192 I slot print_timing: id  0 | task 316 | n_gen =    803, tg =   0.68 t/s, tg_3s =   0.64 t/s
+Oct 08 23:20:09 node2 llama-server[299633]: 31.39.327.384 I slot print_timing: id  0 | task 316 | n_gen =    806, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:20:14 node2 llama-server[299633]: 31.43.702.739 I slot print_timing: id  0 | task 316 | n_gen =    809, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:20:18 node2 llama-server[299633]: 31.48.028.906 I slot print_timing: id  0 | task 316 | n_gen =    812, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:20:21 node2 llama-server[299633]: 31.51.041.676 I slot print_timing: id  0 | task 316 | n_gen =    814, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:20:25 node2 llama-server[299633]: 31.55.338.878 I slot print_timing: id  0 | task 316 | n_gen =    817, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:20:29 node2 llama-server[299633]: 31.59.365.986 I slot print_timing: id  0 | task 316 | n_gen =    820, tg =   0.68 t/s, tg_3s =   0.74 t/s
+Oct 08 23:20:34 node2 llama-server[299633]: 32.03.723.893 I slot print_timing: id  0 | task 316 | n_gen =    823, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:20:37 node2 llama-server[299633]: 32.06.764.959 I slot print_timing: id  0 | task 316 | n_gen =    825, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:20:41 node2 llama-server[299633]: 32.11.269.168 I slot print_timing: id  0 | task 316 | n_gen =    828, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:20:46 node2 llama-server[299633]: 32.15.618.883 I slot print_timing: id  0 | task 316 | n_gen =    831, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:20:50 node2 llama-server[299633]: 32.19.639.529 I slot print_timing: id  0 | task 316 | n_gen =    834, tg =   0.68 t/s, tg_3s =   0.75 t/s
+Oct 08 23:20:54 node2 llama-server[299633]: 32.23.948.793 I slot print_timing: id  0 | task 316 | n_gen =    837, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:20:58 node2 llama-server[299633]: 32.28.327.608 I slot print_timing: id  0 | task 316 | n_gen =    840, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:21:03 node2 llama-server[299633]: 32.32.575.851 I slot print_timing: id  0 | task 316 | n_gen =    843, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:21:07 node2 llama-server[299633]: 32.36.814.688 I slot print_timing: id  0 | task 316 | n_gen =    846, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:21:11 node2 llama-server[299633]: 32.41.001.072 I slot print_timing: id  0 | task 316 | n_gen =    849, tg =   0.68 t/s, tg_3s =   0.72 t/s
+Oct 08 23:21:16 node2 llama-server[299633]: 32.45.549.287 I slot print_timing: id  0 | task 316 | n_gen =    852, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:21:20 node2 llama-server[299633]: 32.49.711.888 I slot print_timing: id  0 | task 316 | n_gen =    855, tg =   0.68 t/s, tg_3s =   0.72 t/s
+Oct 08 23:21:24 node2 llama-server[299633]: 32.53.980.542 I slot print_timing: id  0 | task 316 | n_gen =    858, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:21:27 node2 llama-server[299633]: 32.57.031.118 I slot print_timing: id  0 | task 316 | n_gen =    860, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:21:32 node2 llama-server[299633]: 33.01.878.997 I slot print_timing: id  0 | task 316 | n_gen =    863, tg =   0.68 t/s, tg_3s =   0.62 t/s
+Oct 08 23:21:35 node2 llama-server[299633]: 33.04.907.273 I slot print_timing: id  0 | task 316 | n_gen =    865, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:21:39 node2 llama-server[299633]: 33.09.232.514 I slot print_timing: id  0 | task 316 | n_gen =    868, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:21:42 node2 llama-server[299633]: 33.12.413.867 I slot print_timing: id  0 | task 316 | n_gen =    870, tg =   0.68 t/s, tg_3s =   0.63 t/s
+Oct 08 23:21:47 node2 llama-server[299633]: 33.16.770.752 I slot print_timing: id  0 | task 316 | n_gen =    873, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:21:51 node2 llama-server[299633]: 33.21.224.332 I slot print_timing: id  0 | task 316 | n_gen =    876, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:21:56 node2 llama-server[299633]: 33.25.491.173 I slot print_timing: id  0 | task 316 | n_gen =    879, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:22:00 node2 llama-server[299633]: 33.29.810.646 I slot print_timing: id  0 | task 316 | n_gen =    882, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:22:03 node2 llama-server[299633]: 33.32.846.348 I slot print_timing: id  0 | task 316 | n_gen =    884, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:22:07 node2 llama-server[299633]: 33.36.892.342 I slot print_timing: id  0 | task 316 | n_gen =    887, tg =   0.68 t/s, tg_3s =   0.74 t/s
+Oct 08 23:22:11 node2 llama-server[299633]: 33.41.256.836 I slot print_timing: id  0 | task 316 | n_gen =    890, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:22:16 node2 llama-server[299633]: 33.45.577.660 I slot print_timing: id  0 | task 316 | n_gen =    893, tg =   0.68 t/s, tg_3s =   0.69 t/s
+Oct 08 23:22:19 node2 llama-server[299633]: 33.48.715.009 I slot print_timing: id  0 | task 316 | n_gen =    895, tg =   0.68 t/s, tg_3s =   0.64 t/s
+Oct 08 23:22:23 node2 llama-server[299633]: 33.52.872.309 I slot print_timing: id  0 | task 316 | n_gen =    898, tg =   0.68 t/s, tg_3s =   0.72 t/s
+Oct 08 23:22:28 node2 llama-server[299633]: 33.57.475.399 I slot print_timing: id  0 | task 316 | n_gen =    901, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:22:31 node2 llama-server[299633]: 34.00.728.668 I slot print_timing: id  0 | task 316 | n_gen =    903, tg =   0.68 t/s, tg_3s =   0.61 t/s
+Oct 08 23:22:35 node2 llama-server[299633]: 34.05.034.006 I slot print_timing: id  0 | task 316 | n_gen =    906, tg =   0.68 t/s, tg_3s =   0.70 t/s
+Oct 08 23:22:40 node2 llama-server[299633]: 34.09.520.044 I slot print_timing: id  0 | task 316 | n_gen =    909, tg =   0.68 t/s, tg_3s =   0.67 t/s
+Oct 08 23:22:43 node2 llama-server[299633]: 34.12.581.259 I slot print_timing: id  0 | task 316 | n_gen =    911, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:22:47 node2 llama-server[299633]: 34.16.820.208 I slot print_timing: id  0 | task 316 | n_gen =    914, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:22:51 node2 llama-server[299633]: 34.21.070.507 I slot print_timing: id  0 | task 316 | n_gen =    917, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:22:54 node2 llama-server[299633]: 34.24.115.874 I slot print_timing: id  0 | task 316 | n_gen =    919, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:22:57 node2 llama-server[299633]: 34.27.312.114 I slot print_timing: id  0 | task 316 | n_gen =    921, tg =   0.68 t/s, tg_3s =   0.63 t/s
+Oct 08 23:23:01 node2 llama-server[299633]: 34.30.432.916 I slot print_timing: id  0 | task 316 | n_gen =    923, tg =   0.68 t/s, tg_3s =   0.64 t/s
+Oct 08 23:23:04 node2 llama-server[299633]: 34.33.645.434 I slot print_timing: id  0 | task 316 | n_gen =    925, tg =   0.68 t/s, tg_3s =   0.62 t/s
+Oct 08 23:23:07 node2 llama-server[299633]: 34.36.697.969 I slot print_timing: id  0 | task 316 | n_gen =    927, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:23:11 node2 llama-server[299633]: 34.41.219.288 I slot print_timing: id  0 | task 316 | n_gen =    930, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:23:15 node2 llama-server[299633]: 34.44.532.165 I slot print_timing: id  0 | task 316 | n_gen =    932, tg =   0.68 t/s, tg_3s =   0.60 t/s
+Oct 08 23:23:18 node2 llama-server[299633]: 34.47.650.740 I slot print_timing: id  0 | task 316 | n_gen =    934, tg =   0.68 t/s, tg_3s =   0.64 t/s
+Oct 08 23:23:22 node2 llama-server[299633]: 34.51.904.443 I slot print_timing: id  0 | task 316 | n_gen =    937, tg =   0.68 t/s, tg_3s =   0.71 t/s
+Oct 08 23:23:25 node2 llama-server[299633]: 34.54.915.519 I slot print_timing: id  0 | task 316 | n_gen =    939, tg =   0.68 t/s, tg_3s =   0.66 t/s
+Oct 08 23:23:28 node2 llama-server[299633]: 34.57.982.655 I slot print_timing: id  0 | task 316 | n_gen =    941, tg =   0.68 t/s, tg_3s =   0.65 t/s
+Oct 08 23:23:30 node2 llama-server[299633]: 34.59.462.361 I slot print_timing: id  0 | task 316 | prompt eval time =   32385.20 ms /    58 tokens (  558.37 ms per token,     1.79 tokens per second)
+Oct 08 23:23:30 node2 llama-server[299633]: 34.59.462.369 I slot print_timing: id  0 | task 316 |        eval time = 1377591.43 ms /   942 tokens ( 1463.97 ms per token,     0.68 tokens per second)
+Oct 08 23:23:30 node2 llama-server[299633]: 34.59.462.370 I slot print_timing: id  0 | task 316 |       total time = 1409976.64 ms /  1000 tokens
+Oct 08 23:23:30 node2 llama-server[299633]: 34.59.462.371 I slot print_timing: id  0 | task 316 |    graphs reused =       1244
+Oct 08 23:23:30 node2 llama-server[299633]: 34.59.462.583 I slot      release: id  0 | task 316 | stop processing: n_tokens = 1002, truncated = 0
