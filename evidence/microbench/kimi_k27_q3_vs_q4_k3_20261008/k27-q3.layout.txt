@@ -1,0 +1,32 @@
+ -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00001-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00002-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00003-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00004-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00005-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00006-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00007-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00008-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00009-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00010-of-00011.gguf
+<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00011-of-00011.gguf 6913184
+47492088480
+49206847648
+49099366528
+48097480928
+48193923296
+49099366528
+48097480928
+48193923296
+49099366528
+27314610624
+Kimi-K2.7-Code-UD-Q3_K_XL-00001-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00001-of-00011.gguf 6913184
+Kimi-K2.7-Code-UD-Q3_K_XL-00002-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00002-of-00011.gguf 47492088480
+Kimi-K2.7-Code-UD-Q3_K_XL-00003-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00003-of-00011.gguf 49206847648
+Kimi-K2.7-Code-UD-Q3_K_XL-00004-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00004-of-00011.gguf 49099366528
+Kimi-K2.7-Code-UD-Q3_K_XL-00005-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00005-of-00011.gguf 48097480928
+Kimi-K2.7-Code-UD-Q3_K_XL-00006-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00006-of-00011.gguf 48193923296
+Kimi-K2.7-Code-UD-Q3_K_XL-00007-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00007-of-00011.gguf 49099366528
+Kimi-K2.7-Code-UD-Q3_K_XL-00008-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00008-of-00011.gguf 48097480928
+Kimi-K2.7-Code-UD-Q3_K_XL-00009-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00009-of-00011.gguf 48193923296
+Kimi-K2.7-Code-UD-Q3_K_XL-00010-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00010-of-00011.gguf 49099366528
+Kimi-K2.7-Code-UD-Q3_K_XL-00011-of-00011.gguf -> <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00011-of-00011.gguf 27314610624
