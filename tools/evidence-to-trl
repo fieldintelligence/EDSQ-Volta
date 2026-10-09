@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+"""evidence-to-trl — converteer geverifieerde benchmark-samples naar
+trainings-JSONL (SFT-klaar, messages-formaat).
+
+Bronnen:
+  1. lm-eval samples: reports/lm_eval_runs/<member>/<task>/*/samples_*.jsonl
+     - alléén regels met exact_match == 1 (gold-geverifieerd) → tier-1
+     - dedupe per doc_id: flexibele extract wint boven strict (MoM-les),
+       nieuwste run wint boven oudere
+  2. nacht-queue: queue/*.answered.json (judge-geverifieerd) → tier-2
+
+Uitvoer: messages-formaat + meta (bron, task, tier, member).
+Regel: nooit API-output als trainingsdata; alléén local gold/judge-verificatie.
+"""
+from __future__ import annotations
+
+import glob
+import json
+import os
+import re
+import sys
+from collections import defaultdict
+
+ROOT = "/media/knight2/EDS2/projects/virtualv_llm"
+RUNS = os.path.join(ROOT, "reports", "lm_eval_runs")
+QUEUE = "/media/knight2/eds1/queue/night"
+OUT = sys.argv[1] if len(sys.argv) > 1 else "training-sets/frontier-sft.jsonl"
+MEMBERS = sys.argv[2].split(",") if len(sys.argv) > 2 else ["dsv4-flash-0731", "glm53-flash"]
+
+THINK = re.compile(r"<think>.*?</think>\s*", re.S)
+NUM = re.compile(r"####\s*(-?[\d,]+\.?\d*)")
+
+
+def clean_answer(text: str) -> str:
+    if not text:
+        return ""
+    return THINK.sub("", text).strip()
+
+
+def prompt_from_sample(s: dict) -> str | None:
+    """Gerendeerde prompt: lm-eval 'arguments' komt in twee gedaanten —
+    lijst [rendered_prompt, ...] of dict {gen_args_N: {arg_0: [messages]}}."""
+    args = s.get("arguments")
+    if isinstance(args, list) and args and isinstance(args[0], (str, list)):
+        p = args[0]
+        if isinstance(p, list):                    # message-lijst [[sys?, user]]
+            parts = []
+            for m in p:
+                if isinstance(m, list) and m:
+                    role = m[0] if isinstance(m[0], str) else "user"
+                    parts.append(f"{role}: {m[1]}")
+            return "\n\n".join(parts) if parts else None
+        if isinstance(p, str) and p.strip():
+            return p
+        return None
+    if isinstance(args, dict):
+        try:
+            msgs = args["gen_args_0"]["arg_0"][0]   # [[role, content], ...]
+            parts = []
+            for m in msgs:
+                role, content = (m if isinstance(m, list) else ("user", m))[:2] if isinstance(m, list) else ("user", str(m))
+                parts.append(f"{role}: {content}")
+            return "\n\n".join(parts)
+        except Exception:
+            return None
+    return None
+
+
+def collect_lm_eval(member: str, sink: list, stats: dict) -> None:
+    base = os.path.join(RUNS, member)
+    if not os.path.isdir(base):
+        return
+    for task in sorted(os.listdir(base)):
+        tdir = os.path.join(base, task)
+        if not os.path.isdir(tdir):
+            continue
+        files = sorted(glob.glob(os.path.join(tdir, "**", "samples_*.jsonl"), recursive=True))
+        if not files:
+            continue
+        newest = files[-1]                      # nieuwste poging wint
+        by_doc: dict = {}
+        strict: dict = {}
+        with open(newest) as f:
+            for line in f:
+                try:
+                    s = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                d = s.get("doc_id")
+                if d is None:
+                    continue
+                if "flexible" in str(s.get("filter", "")):
+                    by_doc[d] = s
+                else:
+                    strict.setdefault(d, s)
+        for d in strict:
+            by_doc.setdefault(d, strict[d])     # flexible wint
+
+        kept = 0
+        for d, s in sorted(by_doc.items()):
+            em = s.get("exact_match", s.get("acc"))
+            if em is None or float(em) != 1.0:
+                continue                        # alléén correcte antwoorden
+            prompt = prompt_from_sample(s)
+            fr = s.get("filtered_resps")
+            answer = clean_answer(fr[0] if isinstance(fr, list) and fr else str(fr or ""))
+            if not prompt or not answer:
+                continue
+            sink.append({
+                "messages": [
+                    {"role": "user", "content": prompt},
+                    {"role": "assistant", "content": answer},
+                ],
+                "meta": {"source": f"lm-eval/{member}", "task": task,
+                         "doc_id": d, "verified": "gold-match",
+                         "quality_tier": 1},
+            })
+            kept += 1
+        stats[f"lm-eval/{member}/{task}"] = kept
+
+
+def collect_queue(sink: list, stats: dict) -> None:
+    kept = 0
+    for f in sorted(glob.glob(os.path.join(QUEUE, "*.answered.json"))):
+        try:
+            d = json.load(open(f))
+        except json.JSONDecodeError:
+            continue
+        q = (d.get("question") or "").strip()
+        a = clean_answer(d.get("answer") or "")
+        if not q or not a:
+            continue
+        sink.append({
+            "messages": [
+                {"role": "user", "content": q},
+                {"role": "assistant", "content": a},
+            ],
+            "meta": {"source": "night-queue", "verified": "judge",
+                     "quality_tier": 2, "answered_at": d.get("answered_at")},
+        })
+        kept += 1
+    stats["night-queue"] = kept
+
+
+def main() -> int:
+    sink: list = []
+    stats: dict = defaultdict(int)
+    for m in MEMBERS:
+        collect_lm_eval(m, sink, stats)
+    collect_queue(sink, stats)
+    os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)
+    with open(OUT, "w") as f:
+        for r in sink:
+            f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    print(f"[trl] {len(sink)} trainingsvoorbeelden -> {OUT}")
+    for k, v in sorted(stats.items()):
+        print(f"  {k}: {v}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
