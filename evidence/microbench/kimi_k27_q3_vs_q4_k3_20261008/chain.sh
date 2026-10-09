@@ -3,10 +3,10 @@
 # the V100 pair (tier-sharded llama.cpp, identical flags and probes), then the
 # GLM-5.3-Flash battery, then restore the day lane and cron.
 set -u
-W=/media/knight2/EDS2/projects/virtualv_llm-wt-pub2; cd "$W"
+W=<EDS2>/projects/virtualv_llm-wt-pub2; cd "$W"
 L=$W/reports/benchmark_logs; V=$L/volta_k
-OLD=/media/knight2/EDS2/tools/llama.cpp/build-v100/bin/llama-server
-FN=/media/knight2/EDS2/models/llm/qwen38-flash-next-ap-iq2s/AP-IQ2_S/Qwen3.8-Flash-Next-AP-IQ2_S.gguf
+OLD=<EDS2>/tools/llama.cpp/build-v100/bin/llama-server
+FN=<EDS2>/models/llm/qwen38-flash-next-ap-iq2s/AP-IQ2_S/Qwen3.8-Flash-Next-AP-IQ2_S.gguf
 log() { echo "$(date '+%F %T') $*"; }
 health() { for i in $(seq 1 "$2"); do curl -sf -m3 "localhost:$1/health" >/dev/null 2>&1 && return 0; sleep 20; done; return 1; }
 
@@ -41,11 +41,11 @@ kimi() { # tag model-shard-1 alias
   systemctl --user stop $unit 2>/dev/null; sleep 20
 }
 
-kimi k27-q3 /media/knight2/eds1/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00001-of-00011.gguf k27q3
-kimi k27-q4 /media/knight2/eds1/models/kimi-k2.7-ud-q4/Kimi-K2.7-Code-UD-Q4_K_XL-00001-of-00014.gguf k27q4
+kimi k27-q3 <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00001-of-00011.gguf k27q3
+kimi k27-q4 <eds1>/models/kimi-k2.7-ud-q4/Kimi-K2.7-Code-UD-Q4_K_XL-00001-of-00014.gguf k27q4
 
 # K3: 6 shards on NVMe, 10 downloaded straight to PMem
-T=/mnt/pmem0/kimi-k3-tail/UD-IQ2_XXS; N=/media/knight2/eds1/models/llm/gguf/kimi-k3-ud-iq2xxs/UD-IQ2_XXS
+T=/mnt/pmem0/kimi-k3-tail/UD-IQ2_XXS; N=<eds1>/models/llm/gguf/kimi-k3-ud-iq2xxs/UD-IQ2_XXS
 while pgrep -f "hf download unsloth/Kimi-K3-GGUF" >/dev/null || [ "$(ls $T/*.gguf 2>/dev/null | wc -l)" -lt 10 ]; do
   [ "$(ls $T/*.gguf 2>/dev/null | wc -l)" -lt 10 ] && ! pgrep -f "hf download unsloth/Kimi-K3-GGUF" >/dev/null && { log "K3-download onvolledig en gestopt"; break; }
   sleep 120; done

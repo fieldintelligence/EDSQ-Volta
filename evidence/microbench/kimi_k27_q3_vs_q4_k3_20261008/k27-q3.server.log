@@ -1,11 +1,11 @@
-Oct 08 22:14:07 node2 systemd[3297]: Started volta-k27-q3.service - /media/knight2/EDS2/tools/llama.cpp/build-v100/bin/llama-server --model /media/knight2/eds1/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00001-of-00011.gguf --alias k27q3 --host 127.0.0.1 --port 18050 --ctx-size 8192 --parallel 1 -ngl 99 --threads 48 --flash-attn on --cache-type-k q8_0 --cache-type-v q8_0 --cpu-moe --no-op-offload --jinja --special.
+Oct 08 22:14:07 node2 systemd[3297]: Started volta-k27-q3.service - <EDS2>/tools/llama.cpp/build-v100/bin/llama-server --model <eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00001-of-00011.gguf --alias k27q3 --host 127.0.0.1 --port 18050 --ctx-size 8192 --parallel 1 -ngl 99 --threads 48 --flash-attn on --cache-type-k q8_0 --cache-type-v q8_0 --cpu-moe --no-op-offload --jinja --special.
 Oct 08 22:14:07 node2 llama-server[267370]: 0.00.122.334 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
 Oct 08 22:14:07 node2 llama-server[267370]: 0.00.122.866 W srv  llama_server: -----------------
 Oct 08 22:14:07 node2 llama-server[267370]: 0.00.122.869 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
 Oct 08 22:14:07 node2 llama-server[267370]: 0.00.122.869 W srv  llama_server: this can be a security risk (cross-origin attacks)
 Oct 08 22:14:07 node2 llama-server[267370]: 0.00.122.870 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
 Oct 08 22:14:07 node2 llama-server[267370]: 0.00.122.870 W srv  llama_server: -----------------
-Oct 08 22:14:07 node2 llama-server[267370]: 0.00.124.225 I srv    load_model: loading model '/media/knight2/eds1/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00001-of-00011.gguf'
+Oct 08 22:14:07 node2 llama-server[267370]: 0.00.124.225 I srv    load_model: loading model '<eds1>/models/kimi-k2.7-ud-q3/UD-Q3_K_XL/Kimi-K2.7-Code-UD-Q3_K_XL-00001-of-00011.gguf'
 Oct 08 22:14:08 node2 llama-server[267370]: 0.01.063.933 W llama_model_loader: tensor overrides to CPU are used with mmap enabled - consider using --load-mode none for better performance
 Oct 08 22:19:49 node2 llama-server[267370]: 5.42.396.834 W llama_context: setting new yarn_attn_factor = 1.0000 (mscale == 1.0, mscale_all_dim = 1.0)
 Oct 08 22:19:49 node2 llama-server[267370]: 5.42.551.716 I cmn          init: llama threadpool init, n_threads = 48
